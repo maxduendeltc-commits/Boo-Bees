@@ -371,6 +371,29 @@
             color: var(--accent);
         }
 
+        /* Travel Times Badge Grid */
+        .transit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+            background: #F4F7F6;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .transit-item {
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        .transit-item span {
+            display: block;
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
         /* Calc & Converter */
         .calc-box {
             display: flex;
@@ -576,24 +599,65 @@
             </div>
         </div>
 
+        <!-- MALECÓN -->
         <div class="info-card">
-            <div class="info-title">El Malecón & Zona Romántica</div>
+            <div class="info-title">El Malecón & Downtown Boardwalk</div>
             <span class="attraction-tag">In-Town Iconic Spot</span>
-            <p>The famous oceanfront boardwalk featuring bronze sculptures, street performers, and sunset views, leading directly into Old Town (Zona Romántica) cobblestone dining.</p>
+            <p>The famous oceanfront boardwalk featuring bronze sculptures, street performers, and sunset views.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>~40–45 min</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>8–12 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>12–15 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
+            </div>
+
             <div style="margin-top: 10px; margin-bottom: 5px;">
                 <a href="https://www.google.com/maps/search/?api=1&query=Malecon+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
                     📍 Open Boardwalk Pin in Google Maps ↗
                 </a>
             </div>
             <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos al Malecón, por favor?" or "A la Zona Romántica, por favor."
+                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos al Malecón, por favor?" or "Al Malecón, por favor."
             </div>
         </div>
 
+        <!-- ZONA ROMÁNTICA & LOS MUERTOS PIER -->
+        <div class="info-card">
+            <div class="info-title">Zona Romántica & Los Muertos Pier</div>
+            <span class="attraction-tag">Dining & Water Taxi Hub</span>
+            <p>Historic cobblestone neighborhood full of local dining, beach clubs, and the sail-shaped Los Muertos pier where water taxis depart.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>~55–65 min</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>12–18 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>20–25 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>Departure Pier</span></div>
+            </div>
+
+            <div style="margin-top: 10px; margin-bottom: 5px;">
+                <a href="https://www.google.com/maps/search/?api=1&query=Los+Muertos+Pier+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
+                    📍 Open Los Muertos Pier Pin in Google Maps ↗
+                </a>
+            </div>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "A la Zona Romántica / Al Muelle de Los Muertos, por favor."
+            </div>
+        </div>
+
+        <!-- CHURCH -->
         <div class="info-card">
             <div class="info-title">Parroquia de Nuestra Señora de Guadalupe</div>
             <span class="attraction-tag">Historical Landmark</span>
-            <p>The iconic parish church crowned with ornate wrought-iron artwork that dominates the town skyline, located just one block back from the Malecón.</p>
+            <p>The iconic parish church crowned with ornate wrought-iron artwork, located just one block inland from the Malecón.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>~45 min</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>10–12 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>15 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
+            </div>
+
             <div style="margin-top: 10px; margin-bottom: 5px;">
                 <a href="https://www.google.com/maps/search/?api=1&query=Parroquia+de+Nuestra+Senora+de+Guadalupe+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
                     📍 Open Church Pin in Google Maps ↗
@@ -604,10 +668,42 @@
             </div>
         </div>
 
+        <!-- MARINA VALLARTA -->
+        <div class="info-card">
+            <div class="info-title">Marina Vallarta Boardwalk & Lighthouse</div>
+            <span class="attraction-tag">Yachts & Dining</span>
+            <p>Upscale marina lined with luxury yachts, oceanfront restaurants, and the iconic lighthouse bar. Great evening stroll destination.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>~45–50 min</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>8–10 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>12–15 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
+            </div>
+
+            <div style="margin-top: 10px; margin-bottom: 5px;">
+                <a href="https://www.google.com/maps/search/?api=1&query=Marina+Vallarta+Lighthouse" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
+                    📍 Open Marina Vallarta Pin in Google Maps ↗
+                </a>
+            </div>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "A la Marina Vallarta, por favor."
+            </div>
+        </div>
+
+        <!-- BOTANICAL GARDENS -->
         <div class="info-card">
             <div class="info-title">Jardín Botánico de Vallarta</div>
             <span class="attraction-tag">Day Trip / Nature</span>
-            <p>World-class botanical garden located in the Sierra Madre foothills. Catch the blue <strong>"El Tuito"</strong> bus from Old Town.</p>
+            <p>World-class botanical garden in the Sierra Madre foothills featuring orchids, hiking trails, and river swimming.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>Too Far</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>35–45 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>55–65 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
+            </div>
+
             <div style="margin-top: 10px; margin-bottom: 5px; display: flex; flex-direction: column; gap: 4px;">
                 <a href="https://www.google.com/maps/search/?api=1&query=Vallarta+Botanical+Garden" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
                     📍 Open Garden Pin in Google Maps ↗
@@ -617,15 +713,24 @@
                 </a>
             </div>
             <div class="phrase-box">
-                📍 <strong>Bus Stop Location:</strong> Corner of Carranza and Aguacate in Zona Romántica.
+                📍 <strong>Bus Details:</strong> Catch blue "El Tuito" bus at Carranza & Aguacate in Zona Romántica.
                 <br>🗣️ <strong>Phrase:</strong> "¿Dónde podemos tomar el autobús para el Jardín Botánico?"
             </div>
         </div>
 
+        <!-- LOS ARCOS MARINE PARK -->
         <div class="info-card">
-            <div class="info-title">Los Arcos Marine Park</div>
+            <div class="info-title">Los Arcos Marine Park (Mismaloya)</div>
             <span class="attraction-tag">Snorkeling & Kayaking</span>
-            <p>Protected granite rock islands jutting out of Mismaloya bay. Teeming with tropical fish, sea caves, and paddleboarding spots.</p>
+            <p>Protected granite rock islands in Mismaloya bay teeming with tropical fish, sea caves, and snorkeling reefs.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>Too Far</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>25–35 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>45–55 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>10 min (from Mismaloya)</span></div>
+            </div>
+
             <div style="margin-top: 10px; margin-bottom: 5px;">
                 <a href="https://www.google.com/maps/search/?api=1&query=Los+Arcos+National+Marine+Park+Mismaloya" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
                     📍 Open Los Arcos Marine Park Pin in Google Maps ↗
@@ -636,10 +741,19 @@
             </div>
         </div>
 
+        <!-- YELAPA & BOCA DE TOMATLÁN -->
         <div class="info-card">
-            <div class="info-title">Yelapa & Boca de Tomatlán</div>
-            <span class="attraction-tag">Boat Adventure</span>
-            <p>A car-free fishing village with a jungle waterfall accessible only by water taxi (panga) departing from the small fishing cove of Boca de Tomatlán.</p>
+            <div class="info-title">Yelapa Beach & Boca de Tomatlán</div>
+            <span class="attraction-tag">Boat Adventure & Waterfalls</span>
+            <p>Car-free coastal fishing village with a jungle waterfall accessible only by water taxi (panga) departing from Boca de Tomatlán or Los Muertos Pier.</p>
+            
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>N/A</span></div>
+                <div class="transit-item">🚕 Taxi to Dock: <span>30 min (to Boca)</span></div>
+                <div class="transit-item">🚌 Bus to Dock: <span>50 min (to Boca)</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>45–60 min</span></div>
+            </div>
+
             <div style="margin-top: 10px; margin-bottom: 5px; display: flex; flex-direction: column; gap: 4px;">
                 <a href="https://www.google.com/maps/search/?api=1&query=Boca+de+Tomatlan+Pier" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
                     📍 Open Boca de Tomatlán Dock Pin in Google Maps ↗
@@ -649,7 +763,7 @@
                 </a>
             </div>
             <div class="phrase-box">
-                📍 <strong>Boat Departure:</strong> Main Pier at Boca de Tomatlán (30 min taxi south of Plaza Pelicanos).
+                📍 <strong>Boat Departure:</strong> Main Pier at Boca de Tomatlán or Los Muertos Pier.
                 <br>🗣️ <strong>Phrase:</strong> "¿A qué hora sale la panga para Yelapa?"
             </div>
         </div>
