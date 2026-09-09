@@ -65,7 +65,7 @@
         .tab-btn {
             background: #E0E0E0;
             border: none;
-            padding: 10px 18px;
+            padding: 10px 16px;
             border-radius: var(--radius);
             font-size: 0.95rem;
             font-weight: bold;
@@ -293,6 +293,68 @@
             min-height: 24px;
         }
 
+        /* Attractions View Styles */
+        .attraction-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .attraction-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .attraction-tag {
+            display: inline-block;
+            background: #E0F2F1;
+            color: var(--primary-dark);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .phrase-box {
+            background: #FFF8E1;
+            border: 1px solid #FFE082;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .directions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media(min-width: 600px) {
+            .directions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .dir-item {
+            background: #F9F9F9;
+            border: 1px solid #EEE;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .dir-es {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
         /* Cheat Sheet & Search */
         .search-box {
             width: 100%;
@@ -354,11 +416,12 @@
 
     <header>
         <h1>🌴 Puerto Vallarta Slang & Culture Guide</h1>
-        <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, and spirits.</p>
+        <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, and attractions.</p>
     </header>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('attractions')">📍 Attractions</button>
         <button class="tab-btn" onclick="switchTab('quiz')">Slang Quiz</button>
         <button class="tab-btn" onclick="switchTab('menuquiz')">Menu Decoder</button>
         <button class="tab-btn" onclick="switchTab('favorites')">⭐ Favorites (<span id="fav-count">0</span>)</button>
@@ -387,6 +450,85 @@
             <button class="ctrl-btn" id="prev-btn" onclick="prevCard()">Previous</button>
             <span id="card-counter">1 / 10</span>
             <button class="ctrl-btn" id="next-btn" onclick="nextCard()">Next</button>
+        </div>
+    </div>
+
+    <!-- ATTRACTIONS & DIRECTIONS VIEW -->
+    <div id="attractions" class="view">
+        <div class="attraction-card" style="border-left-color: var(--accent);">
+            <div class="attraction-title">🧭 "¿Cómo llegamos a...?" Direction Helper</div>
+            <p>How to ask for and understand directions from locals when exploring PV:</p>
+            <div class="directions-grid">
+                <div class="dir-item">
+                    <div class="dir-es">¿Cómo llegamos a...?</div>
+                    <div class="hint-text">"How do we get to...?"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">Todo derecho / Todo recto</div>
+                    <div class="hint-text">"Straight ahead"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">A la derecha / A la izquierda</div>
+                    <div class="hint-text">"To the right / To the left"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">A unas cuadras</div>
+                    <div class="hint-text">"A few blocks away"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">A la vuelta</div>
+                    <div class="hint-text">"Just around the corner"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">Cruzando la calle</div>
+                    <div class="hint-text">"Across the street"</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="attraction-card">
+            <div class="attraction-title">El Malecón & Zona Romántica</div>
+            <span class="attraction-tag">In-Town Iconic Spot</span>
+            <p>The famous oceanfront boardwalk featuring bronze sculptures, street performers, and sunset views, leading directly into Old Town (Zona Romántica) cobblestone dining.</p>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos al Malecón, por favor?" or "A la Zona Romántica, por favor."
+            </div>
+        </div>
+
+        <div class="attraction-card">
+            <div class="attraction-title">Parroquia de Nuestra Señora de Guadalupe</div>
+            <span class="attraction-tag">Historical Landmark</span>
+            <p>The iconic parish church crowned with ornate wrought-iron artwork that dominates the town skyline, located just one block back from the Malecón.</p>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos a la iglesia de la corona?"
+            </div>
+        </div>
+
+        <div class="attraction-card">
+            <div class="attraction-title">Jardín Botánico de Vallarta</div>
+            <span class="attraction-tag">Day Trip / Nature</span>
+            <p>World-class botanical garden located in the Sierra Madre foothills south of town. Features native orchids, rainforest trails, and a river swimming spot.</p>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "¿Dónde podemos tomar el autobús para el Jardín Botánico?"
+            </div>
+        </div>
+
+        <div class="attraction-card">
+            <div class="attraction-title">Los Arcos Marine Park</div>
+            <span class="attraction-tag">Snorkeling & Kayaking</span>
+            <p>Protected granite rock islands jutting out of Mismaloya bay. Teeming with tropical fish, sea caves, and paddleboarding spots.</p>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "¿Cuánto cuesta una panga para hacer snorkel en Los Arcos?"
+            </div>
+        </div>
+
+        <div class="attraction-card">
+            <div class="attraction-title">Yelapa & Boca de Tomatlán</div>
+            <span class="attraction-tag">Boat Adventure</span>
+            <p>A car-free fishing village with a jungle waterfall accessible only by water taxi (panga) departing from the small river mouth cove of Boca de Tomatlán.</p>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "¿A qué hora sale la panga para Yelapa?"
+            </div>
         </div>
     </div>
 
@@ -427,6 +569,13 @@
 
     <script>
         const vocabulary = [
+            // Attractions & Directions
+            { id: 25, term: "¿Cómo llegamos a...?", phonetic: "KOH-moh yay-GAH-mohs ah", meaning: "How do we get to...?", context: "The go-to phrase when asking locals or taxi drivers for directions to any landmark.", category: "Attractions & Directions" },
+            { id: 26, term: "Todo derecho", phonetic: "TOH-doh dey-RAY-choh", meaning: "Straight ahead", context: "Common response when someone tells you to keep walking straight down a street.", category: "Attractions & Directions" },
+            { id: 27, term: "A la derecha / izquierda", phonetic: "ah lah dey-RAY-chah / ees-KYEHR-dah", meaning: "To the right / To the left", context: "Key directional terms to listen for when asking where something is located.", category: "Attractions & Directions" },
+            { id: 28, term: "A la vuelta / A unas cuadras", phonetic: "ah lah VWEHL-tah / ah OO-nahs KWAH-drahs", meaning: "Around the corner / A few blocks away", context: "Used by locals when giving walking distances around Old Town Vallarta.", category: "Attractions & Directions" },
+            { id: 29, term: "¿A qué hora sale la panga?", phonetic: "ah KAY OH-rah SAH-lay lah PAHN-gah", meaning: "What time does the water taxi leave?", context: "Essential phrase when taking small boats from Boca de Tomatlán to Yelapa or beach coves.", category: "Attractions & Directions" },
+
             // Slang & Greetings
             { id: 1, term: "¿Qué onda, vale?", phonetic: "KAY own-dah, VAH-lay", meaning: "What's up, man/bro?", context: "'Vale' is the local Jalisco equivalent to 'guy' or 'bro'. Standard friendly greeting.", category: "Greetings & Slang" },
             { id: 2, term: "¡Ánimo!", phonetic: "AH-nee-moh", meaning: "Let's go! / Cheer up! / Have a good one!", context: "Used everywhere in PV as a cheerful greeting, farewell, or way to say 'you're welcome'.", category: "Greetings & Slang" },
