@@ -293,8 +293,8 @@
             min-height: 24px;
         }
 
-        /* Attractions View Styles */
-        .attraction-card {
+        /* Attractions & Info Styles */
+        .info-card {
             background: var(--card-bg);
             border-radius: var(--radius);
             padding: 20px;
@@ -303,7 +303,11 @@
             border-left: 5px solid var(--primary);
         }
 
-        .attraction-title {
+        .info-card.accent-border {
+            border-left-color: var(--accent);
+        }
+
+        .info-title {
             font-size: 1.4rem;
             font-weight: bold;
             color: var(--primary-dark);
@@ -330,6 +334,14 @@
             font-weight: 500;
         }
 
+        .hotel-box {
+            background: #E8F5E9;
+            border: 2px dashed #4CAF50;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-top: 10px;
+        }
+
         .directions-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -353,6 +365,23 @@
         .dir-es {
             font-weight: bold;
             color: var(--accent);
+        }
+
+        /* Calc & Converter */
+        .calc-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .calc-input {
+            padding: 8px 12px;
+            border: 2px solid #DDD;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 120px;
         }
 
         /* Cheat Sheet & Search */
@@ -415,12 +444,13 @@
 <body>
 
     <header>
-        <h1>🌴 Puerto Vallarta Slang & Culture Guide</h1>
+        <h1>🌴 Puerto Vallarta Slang & Local Guide</h1>
         <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, and attractions.</p>
     </header>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('logistics')">🚖 Hotel & Currency</button>
         <button class="tab-btn" onclick="switchTab('attractions')">📍 Attractions</button>
         <button class="tab-btn" onclick="switchTab('quiz')">Slang Quiz</button>
         <button class="tab-btn" onclick="switchTab('menuquiz')">Menu Decoder</button>
@@ -453,10 +483,63 @@
         </div>
     </div>
 
+    <!-- LOGISTICS, HOTEL & CURRENCY VIEW -->
+    <div id="logistics" class="view">
+        <!-- Resort Card for Taxi Drivers -->
+        <div class="info-card accent-border">
+            <div class="info-title">🏨 Accommodation Card</div>
+            <p>Show this screen to any taxi or rideshare driver when returning to the resort:</p>
+            <div class="hotel-box">
+                <div style="font-size: 1.3rem; font-weight: bold; color: var(--primary-dark);">Plaza Pelicanos Grand Beach Resort</div>
+                <div style="font-size: 1.05rem; margin-top: 4px;"><strong>Dirección:</strong> José Clemente Orozco 131, Zona Hotelera Las Glorias</div>
+                <div style="font-size: 0.95rem; color: #555; margin-top: 4px;"><strong>Referencia:</strong> Por la Av. Francisco Medina Ascencio, Zona Hotelera Las Glorias</div>
+            </div>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
+            </div>
+        </div>
+
+        <!-- Tipping Guide & Currency Converter -->
+        <div class="info-card">
+            <div class="info-title">💵 Tipping & Peso Calculator</div>
+            <p style="margin-bottom: 10px;">Quick reference for local tipping standards in Puerto Vallarta:</p>
+            <ul style="margin-left: 20px; font-size: 0.95rem; margin-bottom: 15px;">
+                <li><strong>Restaurants:</strong> 10%–15% (Check bill for <em>"Propina Incluida"</em> first).</li>
+                <li><strong>Taxis:</strong> Tipping is not expected, but round up $10–$20 pesos for good service.</li>
+                <li><strong>Panga Drivers / Tour Guides:</strong> $50–$100 pesos per couple.</li>
+                <li><strong>Baggage / Bellhops:</strong> $20–$50 pesos per bag.</li>
+            </ul>
+
+            <div style="background: #F0F4F8; padding: 12px; border-radius: 8px;">
+                <strong>Quick Peso $\rightarrow$ USD Converter</strong> (Estimated at 20 MXN = $1 USD):
+                <div class="calc-box">
+                    <input type="number" id="peso-input" class="calc-input" placeholder="Pesos ($)" oninput="convertPesos()">
+                    <span>MXN = </span>
+                    <strong id="usd-output" style="font-size: 1.2rem; color: var(--accent);">$0.00 USD</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Contacts -->
+        <div class="info-card">
+            <div class="info-title">🚨 Emergency & Key Numbers</div>
+            <div class="directions-grid">
+                <div class="dir-item">
+                    <div class="dir-es">911</div>
+                    <div class="hint-text">National Emergency Services (Police, Ambulance, Fire)</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">U.S. Consular Agency PV</div>
+                    <div class="hint-text">+52 (333) 268-2100 (Paradise Plaza, Nuevo Vallarta)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ATTRACTIONS & DIRECTIONS VIEW -->
     <div id="attractions" class="view">
-        <div class="attraction-card" style="border-left-color: var(--accent);">
-            <div class="attraction-title">🧭 "¿Cómo llegamos a...?" Direction Helper</div>
+        <div class="info-card accent-border">
+            <div class="info-title">🧭 "¿Cómo llegamos a...?" Direction Helper</div>
             <p>How to ask for and understand directions from locals when exploring PV:</p>
             <div class="directions-grid">
                 <div class="dir-item">
@@ -486,8 +569,8 @@
             </div>
         </div>
 
-        <div class="attraction-card">
-            <div class="attraction-title">El Malecón & Zona Romántica</div>
+        <div class="info-card">
+            <div class="info-title">El Malecón & Zona Romántica</div>
             <span class="attraction-tag">In-Town Iconic Spot</span>
             <p>The famous oceanfront boardwalk featuring bronze sculptures, street performers, and sunset views, leading directly into Old Town (Zona Romántica) cobblestone dining.</p>
             <div class="phrase-box">
@@ -495,8 +578,8 @@
             </div>
         </div>
 
-        <div class="attraction-card">
-            <div class="attraction-title">Parroquia de Nuestra Señora de Guadalupe</div>
+        <div class="info-card">
+            <div class="info-title">Parroquia de Nuestra Señora de Guadalupe</div>
             <span class="attraction-tag">Historical Landmark</span>
             <p>The iconic parish church crowned with ornate wrought-iron artwork that dominates the town skyline, located just one block back from the Malecón.</p>
             <div class="phrase-box">
@@ -504,17 +587,18 @@
             </div>
         </div>
 
-        <div class="attraction-card">
-            <div class="attraction-title">Jardín Botánico de Vallarta</div>
+        <div class="info-card">
+            <div class="info-title">Jardín Botánico de Vallarta</div>
             <span class="attraction-tag">Day Trip / Nature</span>
-            <p>World-class botanical garden located in the Sierra Madre foothills south of town. Features native orchids, rainforest trails, and a river swimming spot.</p>
+            <p>World-class botanical garden located in the Sierra Madre foothills. Catch the blue <strong>"El Tuito"</strong> bus from Old Town.</p>
             <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿Dónde podemos tomar el autobús para el Jardín Botánico?"
+                📍 <strong>Bus Stop Location:</strong> Corner of Carranza and Aguacate in Zona Romántica.
+                <br>🗣️ <strong>Phrase:</strong> "¿Dónde podemos tomar el autobús para el Jardín Botánico?"
             </div>
         </div>
 
-        <div class="attraction-card">
-            <div class="attraction-title">Los Arcos Marine Park</div>
+        <div class="info-card">
+            <div class="info-title">Los Arcos Marine Park</div>
             <span class="attraction-tag">Snorkeling & Kayaking</span>
             <p>Protected granite rock islands jutting out of Mismaloya bay. Teeming with tropical fish, sea caves, and paddleboarding spots.</p>
             <div class="phrase-box">
@@ -522,12 +606,13 @@
             </div>
         </div>
 
-        <div class="attraction-card">
-            <div class="attraction-title">Yelapa & Boca de Tomatlán</div>
+        <div class="info-card">
+            <div class="info-title">Yelapa & Boca de Tomatlán</div>
             <span class="attraction-tag">Boat Adventure</span>
-            <p>A car-free fishing village with a jungle waterfall accessible only by water taxi (panga) departing from the small river mouth cove of Boca de Tomatlán.</p>
+            <p>A car-free fishing village with a jungle waterfall accessible only by water taxi (panga) departing from the small fishing cove of Boca de Tomatlán.</p>
             <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿A qué hora sale la panga para Yelapa?"
+                📍 <strong>Boat Departure:</strong> Main Pier at Boca de Tomatlán (30 min taxi south of Plaza Pelicanos).
+                <br>🗣️ <strong>Phrase:</strong> "¿A qué hora sale la panga para Yelapa?"
             </div>
         </div>
     </div>
@@ -677,6 +762,13 @@
             if (tabId === 'menuquiz') startMenuQuiz();
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'cheatsheet') renderCheatSheet();
+        }
+
+        // Currency Converter
+        function convertPesos() {
+            const pesos = parseFloat(document.getElementById('peso-input').value) || 0;
+            const usd = (pesos / 20).toFixed(2);
+            document.getElementById('usd-output').innerText = `$${usd} USD`;
         }
 
         // Star / Favorites Logic
