@@ -227,6 +227,10 @@
             font-weight: bold;
         }
 
+        .ctrl-btn.secondary {
+            background: var(--accent);
+        }
+
         .ctrl-btn:disabled {
             background: #CCC;
             cursor: not-allowed;
@@ -449,13 +453,14 @@
     </header>
 
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
-        <button class="tab-btn" onclick="switchTab('logistics')">🚖 Hotel & Currency</button>
-        <button class="tab-btn" onclick="switchTab('attractions')">📍 Attractions</button>
-        <button class="tab-btn" onclick="switchTab('quiz')">Slang Quiz</button>
-        <button class="tab-btn" onclick="switchTab('menuquiz')">Menu Decoder</button>
-        <button class="tab-btn" onclick="switchTab('favorites')">⭐ Favorites (<span id="fav-count">0</span>)</button>
-        <button class="tab-btn" onclick="switchTab('cheatsheet')">Quick Reference</button>
+        <button class="tab-btn active" onclick="switchTab('flashcards', event)">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('logistics', event)">🚖 Hotel & Currency</button>
+        <button class="tab-btn" onclick="switchTab('attractions', event)">📍 Attractions</button>
+        <button class="tab-btn" onclick="switchTab('quiz', event)">Slang Quiz</button>
+        <button class="tab-btn" onclick="switchTab('menuquiz', event)">Menu Decoder</button>
+        <button class="tab-btn" onclick="switchTab('weakareas', event)">🎯 Weak Areas (<span id="weak-count">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('favorites', event)">⭐ Favorites (<span id="fav-count">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('cheatsheet', event)">Quick Reference</button>
     </div>
 
     <!-- FLASHCARD VIEW -->
@@ -485,7 +490,6 @@
 
     <!-- LOGISTICS, HOTEL & CURRENCY VIEW -->
     <div id="logistics" class="view">
-        <!-- Resort Card for Taxi Drivers -->
         <div class="info-card accent-border">
             <div class="info-title">🏨 Accommodation Card</div>
             <p>Show this screen to any taxi or rideshare driver when returning to the resort:</p>
@@ -504,7 +508,6 @@
             </div>
         </div>
 
-        <!-- Tipping Guide & Currency Converter -->
         <div class="info-card">
             <div class="info-title">💵 Tipping & Peso Calculator</div>
             <p style="margin-bottom: 10px;">Quick reference for local tipping standards in Puerto Vallarta:</p>
@@ -525,7 +528,6 @@
             </div>
         </div>
 
-        <!-- Emergency Contacts -->
         <div class="info-card">
             <div class="info-title">🚨 Emergency & Key Numbers</div>
             <div class="directions-grid">
@@ -653,7 +655,7 @@
         </div>
     </div>
 
-    <!-- QUIZ VIEW -->
+    <!-- SLANG QUIZ VIEW -->
     <div id="quiz" class="view">
         <div class="quiz-card">
             <div class="quiz-question" id="quiz-q">Question text goes here...</div>
@@ -671,6 +673,29 @@
             <div class="options-grid" id="menu-options"></div>
             <div class="quiz-feedback" id="menu-feedback"></div>
             <button class="ctrl-btn" id="menu-next-btn" style="display:none; margin-top:15px;" onclick="nextMenuQuestion()">Next Menu Item</button>
+        </div>
+    </div>
+
+    <!-- WEAK AREAS REVIEW VIEW -->
+    <div id="weakareas" class="view">
+        <div class="cheat-sheet">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                <h2 style="color: var(--primary);">🎯 Weak Areas & Missed Quiz Items</h2>
+                <div>
+                    <button class="ctrl-btn secondary" onclick="startWeakQuiz()" id="start-weak-quiz-btn">⚡ Practice Missed Items Quiz</button>
+                    <button class="ctrl-btn" style="background: #888;" onclick="clearWeakAreas()">Clear All</button>
+                </div>
+            </div>
+            <p style="margin-bottom: 15px; color: #555;">Terms or menu items you missed in previous quiz sessions will show up here automatically.</p>
+            
+            <div id="weak-quiz-container" style="display:none; margin-bottom: 20px;" class="quiz-card">
+                <div class="quiz-question" id="weak-q">Review question...</div>
+                <div class="options-grid" id="weak-options"></div>
+                <div class="quiz-feedback" id="weak-feedback"></div>
+                <button class="ctrl-btn" id="weak-next-btn" style="display:none; margin-top:15px;" onclick="nextWeakQuestion()">Next Item</button>
+            </div>
+
+            <div id="weak-list">No weak areas yet! Take a Slang or Menu quiz to automatically track any missed answers here.</div>
         </div>
     </div>
 
@@ -732,6 +757,7 @@
 
         const menuDishes = [
             {
+                id: 101,
                 dish: "Pescado Zarandeado al Carbon",
                 question: "If you order this on the beach, what are you getting?",
                 correct: "Butterflied whole fish slathered in adobo marinade and wood-grilled over charcoal",
@@ -744,6 +770,7 @@
                 explanation: "Zarandeado is the classic coastal Jalisco/Nayarit adobo-braised charcoal grilled fish!"
             },
             {
+                id: 102,
                 dish: "Aguachile Negro de Camaron",
                 question: "What makes an 'Aguachile' distinct from standard ceviche?",
                 correct: "Fresh raw shrimp cured instantly in lime juice and crushed chiles, served very spicy",
@@ -756,6 +783,7 @@
                 explanation: "Aguachile uses raw shrimp marinated rapidly in lime juice and fresh ground serranos or charred chiles."
             },
             {
+                id: 103,
                 dish: "Tacos de Birria de Res con Consomé",
                 question: "How should you properly eat this Jalisco staple?",
                 correct: "Dip the spiced braised beef tacos directly into the side bowl of savory broth (consomé)",
@@ -768,6 +796,7 @@
                 explanation: "Birria is rich and spiced! You always dip your taco into the warm consomé broth before taking a bite."
             },
             {
+                id: 104,
                 dish: "Copita de Raicilla de Sierra con Sal de Gusano",
                 question: "What is the proper way to enjoy this order?",
                 correct: "Sip the room-temperature agave spirit slowly, alternating with citrus sprinkled with agave-worm salt",
@@ -784,18 +813,23 @@
         let currentIndex = 0;
         let currentQuizIndex = 0;
         let currentMenuIndex = 0;
+        let currentWeakQuizIndex = 0;
+        let weakQuizItems = [];
+
         let starredIds = JSON.parse(localStorage.getItem('pv_starred_ids') || '[]');
+        let weakIds = JSON.parse(localStorage.getItem('pv_weak_ids') || '[]');
 
         // Tabs
-        function switchTab(tabId) {
+        function switchTab(tabId, evt) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             
-            event.target.classList.add('active');
+            if (evt) evt.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
 
             if (tabId === 'quiz') startQuiz();
             if (tabId === 'menuquiz') startMenuQuiz();
+            if (tabId === 'weakareas') renderWeakAreas();
             if (tabId === 'favorites') renderFavorites();
             if (tabId === 'cheatsheet') renderCheatSheet();
         }
@@ -822,11 +856,35 @@
                 starredIds.push(id);
             }
             localStorage.setItem('pv_starred_ids', JSON.stringify(starredIds));
-            updateFavCount();
+            updateCounts();
         }
 
-        function updateFavCount() {
+        // Weak Areas Logic
+        function addWeakArea(id) {
+            if (!weakIds.includes(id)) {
+                weakIds.push(id);
+                localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
+                updateCounts();
+            }
+        }
+
+        function removeWeakArea(id) {
+            weakIds = weakIds.filter(i => i !== id);
+            localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
+            updateCounts();
+            renderWeakAreas();
+        }
+
+        function clearWeakAreas() {
+            weakIds = [];
+            localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
+            updateCounts();
+            renderWeakAreas();
+        }
+
+        function updateCounts() {
             document.getElementById('fav-count').innerText = starredIds.length;
+            document.getElementById('weak-count').innerText = weakIds.length;
         }
 
         function updateCardStarState() {
@@ -912,26 +970,29 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerText = opt;
-                btn.onclick = () => checkAnswer(btn, opt, item.meaning);
+                btn.onclick = () => checkAnswer(btn, opt, item);
                 optionsGrid.appendChild(btn);
             });
         }
 
-        function checkAnswer(selectedBtn, selectedOpt, correctOpt) {
+        function checkAnswer(selectedBtn, selectedOpt, item) {
             const buttons = document.querySelectorAll('#quiz-options .option-btn');
             buttons.forEach(b => b.disabled = true);
 
-            if (selectedOpt === correctOpt) {
+            if (selectedOpt === item.meaning) {
                 selectedBtn.classList.add('correct');
                 document.getElementById('quiz-feedback').innerText = "¡Exacto! That's correct.";
                 document.getElementById('quiz-feedback').style.color = "#2E7D32";
             } else {
                 selectedBtn.classList.add('wrong');
                 buttons.forEach(b => {
-                    if (b.innerText === correctOpt) b.classList.add('correct');
+                    if (b.innerText === item.meaning) b.classList.add('correct');
                 });
-                document.getElementById('quiz-feedback').innerText = `Not quite! Correct answer: ${correctOpt}`;
+                document.getElementById('quiz-feedback').innerText = `Not quite! Correct answer: ${item.meaning}`;
                 document.getElementById('quiz-feedback').style.color = "#C62828";
+                
+                // Track weak area
+                addWeakArea(item.id);
             }
 
             document.getElementById('quiz-next-btn').style.display = 'inline-block';
@@ -942,7 +1003,7 @@
             if (currentQuizIndex < quizQuestions.length) {
                 renderQuestion();
             } else {
-                document.getElementById('quiz-q').innerText = "🎉 Slang Quiz Complete! You're talking like a Vallarta local.";
+                document.getElementById('quiz-q').innerText = "🎉 Slang Quiz Complete! Check your 'Weak Areas' tab to review any missed terms.";
                 document.getElementById('quiz-options').innerHTML = '';
                 document.getElementById('quiz-feedback').innerText = '';
                 document.getElementById('quiz-next-btn').style.display = 'none';
@@ -970,26 +1031,29 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerText = opt;
-                btn.onclick = () => checkMenuAnswer(btn, opt, item.correct, item.explanation);
+                btn.onclick = () => checkMenuAnswer(btn, opt, item);
                 optionsGrid.appendChild(btn);
             });
         }
 
-        function checkMenuAnswer(selectedBtn, selectedOpt, correctOpt, explanation) {
+        function checkMenuAnswer(selectedBtn, selectedOpt, item) {
             const buttons = document.querySelectorAll('#menu-options .option-btn');
             buttons.forEach(b => b.disabled = true);
 
-            if (selectedOpt === correctOpt) {
+            if (selectedOpt === item.correct) {
                 selectedBtn.classList.add('correct');
-                document.getElementById('menu-feedback').innerText = `¡Buen provecho! ${explanation}`;
+                document.getElementById('menu-feedback').innerText = `¡Buen provecho! ${item.explanation}`;
                 document.getElementById('menu-feedback').style.color = "#2E7D32";
             } else {
                 selectedBtn.classList.add('wrong');
                 buttons.forEach(b => {
-                    if (b.innerText === correctOpt) b.classList.add('correct');
+                    if (b.innerText === item.correct) b.classList.add('correct');
                 });
-                document.getElementById('menu-feedback').innerText = `Not quite. ${explanation}`;
+                document.getElementById('menu-feedback').innerText = `Not quite. ${item.explanation}`;
                 document.getElementById('menu-feedback').style.color = "#C62828";
+                
+                // Track weak area for menu items
+                addWeakArea(item.id);
             }
 
             document.getElementById('menu-next-btn').style.display = 'inline-block';
@@ -1005,6 +1069,143 @@
                 document.getElementById('menu-options').innerHTML = '';
                 document.getElementById('menu-feedback').innerText = '';
                 document.getElementById('menu-next-btn').style.display = 'none';
+            }
+        }
+
+        // Render Weak Areas Tab
+        function renderWeakAreas() {
+            const listContainer = document.getElementById('weak-list');
+            listContainer.innerHTML = '';
+
+            const weakVocab = vocabulary.filter(v => weakIds.includes(v.id));
+            const weakMenu = menuDishes.filter(m => weakIds.includes(m.id));
+
+            if (weakVocab.length === 0 && weakMenu.length === 0) {
+                listContainer.innerHTML = '<div style="color:#888; padding:20px; text-align:center;">No missed items yet! When you answer incorrectly on any quiz, items will automatically show up here for targeted review.</div>';
+                document.getElementById('start-weak-quiz-btn').style.display = 'none';
+                document.getElementById('weak-quiz-container').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('start-weak-quiz-btn').style.display = 'inline-block';
+
+            weakVocab.forEach(v => {
+                const item = document.createElement('div');
+                item.className = 'cheat-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="cheat-term">${v.term} <span style="font-weight:normal; font-size:0.85rem; color:var(--accent);">[Vocab]</span></div>
+                        <div><strong>Meaning:</strong> ${v.meaning}</div>
+                        <div style="font-size:0.9rem; color:#555;">${v.context}</div>
+                    </div>
+                    <button class="ctrl-btn" style="background:#E53935; padding:4px 10px; font-size:0.8rem;" onclick="removeWeakArea(${v.id})">Remove</button>
+                `;
+                listContainer.appendChild(item);
+            });
+
+            weakMenu.forEach(m => {
+                const item = document.createElement('div');
+                item.className = 'cheat-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="cheat-term">${m.dish} <span style="font-weight:normal; font-size:0.85rem; color:var(--primary);">[Menu Item]</span></div>
+                        <div><strong>Correct Info:</strong> ${m.correct}</div>
+                        <div style="font-size:0.9rem; color:#555;">${m.explanation}</div>
+                    </div>
+                    <button class="ctrl-btn" style="background:#E53935; padding:4px 10px; font-size:0.8rem;" onclick="removeWeakArea(${m.id})">Remove</button>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Weak Areas Practice Quiz
+        function startWeakQuiz() {
+            const weakVocab = vocabulary.filter(v => weakIds.includes(v.id)).map(v => ({ type: 'vocab', data: v }));
+            const weakMenu = menuDishes.filter(m => weakIds.includes(m.id)).map(m => ({ type: 'menu', data: m }));
+            
+            weakQuizItems = [...weakVocab, ...weakMenu].sort(() => Math.random() - 0.5);
+            if (weakQuizItems.length === 0) return;
+
+            currentWeakQuizIndex = 0;
+            document.getElementById('weak-quiz-container').style.display = 'block';
+            renderWeakQuestion();
+        }
+
+        function renderWeakQuestion() {
+            const itemObj = weakQuizItems[currentWeakQuizIndex];
+            document.getElementById('weak-feedback').innerText = '';
+            document.getElementById('weak-next-btn').style.display = 'none';
+
+            const optionsGrid = document.getElementById('weak-options');
+            optionsGrid.innerHTML = '';
+
+            if (itemObj.type === 'vocab') {
+                const item = itemObj.data;
+                document.getElementById('weak-q').innerText = `[Vocab] What does "${item.term}" mean?`;
+                let options = [item.meaning];
+                while (options.length < 4) {
+                    let randomItem = vocabulary[Math.floor(Math.random() * vocabulary.length)].meaning;
+                    if (!options.includes(randomItem)) options.push(randomItem);
+                }
+                options.sort(() => Math.random() - 0.5);
+
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkWeakAnswer(btn, opt, item.meaning, item.id);
+                    optionsGrid.appendChild(btn);
+                });
+            } else {
+                const item = itemObj.data;
+                document.getElementById('weak-q').innerText = `[Menu] "${item.dish}": ${item.question}`;
+                let options = [...item.options].sort(() => Math.random() - 0.5);
+
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkWeakAnswer(btn, opt, item.correct, item.id);
+                    optionsGrid.appendChild(btn);
+                });
+            }
+        }
+
+        function checkWeakAnswer(selectedBtn, selectedOpt, correctOpt, itemId) {
+            const buttons = document.querySelectorAll('#weak-options .option-btn');
+            buttons.forEach(b => b.disabled = true);
+
+            if (selectedOpt === correctOpt) {
+                selectedBtn.classList.add('correct');
+                document.getElementById('weak-feedback').innerText = "¡Excelente! You mastered this one! (Removed from Weak Areas)";
+                document.getElementById('weak-feedback').style.color = "#2E7D32";
+                
+                // Remove solved item from weak list
+                weakIds = weakIds.filter(i => i !== itemId);
+                localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
+                updateCounts();
+            } else {
+                selectedBtn.classList.add('wrong');
+                buttons.forEach(b => {
+                    if (b.innerText === correctOpt) b.classList.add('correct');
+                });
+                document.getElementById('weak-feedback').innerText = `Not quite! Correct: ${correctOpt}`;
+                document.getElementById('weak-feedback').style.color = "#C62828";
+            }
+
+            document.getElementById('weak-next-btn').style.display = 'inline-block';
+        }
+
+        function nextWeakQuestion() {
+            currentWeakQuizIndex++;
+            if (currentWeakQuizIndex < weakQuizItems.length) {
+                renderWeakQuestion();
+            } else {
+                document.getElementById('weak-q').innerText = "🎉 Practice Session Finished!";
+                document.getElementById('weak-options').innerHTML = '';
+                document.getElementById('weak-feedback').innerText = 'Great job reviewing your missed items!';
+                document.getElementById('weak-next-btn').style.display = 'none';
+                renderWeakAreas();
             }
         }
 
@@ -1079,7 +1280,7 @@
         }
 
         // Initialize
-        updateFavCount();
+        updateCounts();
         updateCard();
     </script>
 </body>
