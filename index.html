@@ -458,13 +458,30 @@
             margin-top: 5px;
         }
 
+        /* Menu Decoder Specific Banner Styling */
         .menu-banner {
             background: #EFEBE9;
-            border-left: 4px solid var(--accent);
-            padding: 15px;
-            border-radius: 6px;
+            border-left: 5px solid var(--accent);
+            padding: 18px 20px;
+            border-radius: 8px;
             margin-bottom: 20px;
-            font-style: italic;
+        }
+
+        .dish-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: underline;
+            color: var(--primary-dark);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .dish-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            font-weight: bold;
         }
     </style>
 </head>
@@ -782,7 +799,10 @@
     <!-- MENU DECODER QUIZ VIEW -->
     <div id="menuquiz" class="view">
         <div class="quiz-card">
-            <div class="menu-banner" id="menu-dish-name">Simulated Dish Name...</div>
+            <div class="menu-banner">
+                <div class="dish-label">Menu Item</div>
+                <span class="dish-title" id="menu-dish-name">Simulated Dish Name...</span>
+            </div>
             <div class="quiz-question" id="menu-q">What is in this dish?</div>
             <div class="options-grid" id="menu-options"></div>
             <div class="quiz-feedback" id="menu-feedback"></div>
@@ -1132,7 +1152,7 @@
 
         function renderMenuQuestion() {
             const item = menuDishes[currentMenuIndex];
-            document.getElementById('menu-dish-name').innerText = `Menu Item: "${item.dish}"`;
+            document.getElementById('menu-dish-name').innerText = item.dish;
             document.getElementById('menu-q').innerText = item.question;
             document.getElementById('menu-feedback').innerText = '';
             document.getElementById('menu-next-btn').style.display = 'none';
@@ -1222,7 +1242,7 @@
                 item.className = 'cheat-item';
                 item.innerHTML = `
                     <div>
-                        <div class="cheat-term">${m.dish} <span style="font-weight:normal; font-size:0.85rem; color:var(--primary);">[Menu Item]</span></div>
+                        <div class="cheat-term" style="font-size: 1.3rem; text-decoration: underline;">${m.dish} <span style="font-weight:normal; font-size:0.85rem; color:var(--primary); text-decoration: none;">[Menu Item]</span></div>
                         <div><strong>Correct Info:</strong> ${m.correct}</div>
                         <div style="font-size:0.9rem; color:#555;">${m.explanation}</div>
                     </div>
