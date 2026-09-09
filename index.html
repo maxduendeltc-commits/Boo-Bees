@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puerto Vallarta Slang & Local Culture Guide</title>
+    <style>
+        :root {
+            --primary: #008080;
+            --primary-dark: #005959;
+            --accent: #E65100;
+            --bg: #F4F7F6;
+            --card-bg: #FFFFFF;
+            --text: #2C3E50;
+            --light-text: #666666;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--light-text);
+        }
+
+        /* Navigation / Mode Selection */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: #E0E0E0;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #D0D0D0;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Flashcard Styles */
+        .card-container {
+            perspective: 1000px;
+            height: 320px;
+            margin-bottom: 20px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius);
+            background: var(--card-bg);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: #FAFAFA;
+            border: 2px solid var(--primary);
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #E0F2F1;
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .term {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .phonetic {
+            font-style: italic;
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .meaning {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .context {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            max-width: 90%;
+        }
+
+        .audio-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-top: 10px;
+            color: var(--primary);
+            transition: transform 0.1s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .ctrl-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .ctrl-btn:disabled {
+            background: #CCC;
+            cursor: not-allowed;
+        }
+
+        /* Quiz Styles */
+        .quiz-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .quiz-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media(min-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option-btn {
+            background: #F0F0F0;
+            border: 2px solid #E0E0E0;
+            padding: 15px;
+            border-radius: var(--radius);
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: #E8F5E9;
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct {
+            background: #C8E6C9 !important;
+            border-color: #2E7D32 !important;
+            color: #1B5E20;
+        }
+
+        .option-btn.wrong {
+            background: #FFCDD2 !important;
+            border-color: #C62828 !important;
+            color: #B71C1C;
+        }
+
+        .quiz-feedback {
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 24px;
+        }
+
+        /* Reference Cheat Sheet */
+        .cheat-sheet {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .cheat-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .cheat-item:last-child {
+            border-bottom: none;
+        }
+
+        .cheat-term {
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .hint-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌴 Puerto Vallarta Slang & Local Guide</h1>
+        <p>Interactive practice tool for high-yield Mexican colloquialisms, food, and raicilla culture.</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('flashcards')">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">Quiz Mode</button>
+        <button class="tab-btn" onclick="switchTab('cheatsheet')">Quick Reference</button>
+    </div>
+
+    <!-- FLASHCARD VIEW -->
+    <div id="flashcards" class="view active">
+        <div class="card-container">
+            <div class="flashcard" id="card" onclick="flipCard()">
+                <div class="card-front">
+                    <span class="category-tag" id="card-cat">Category</span>
+                    <div class="term" id="card-term">Term</div>
+                    <div class="phonetic" id="card-phone">Pronunciation</div>
+                    <button class="audio-btn" onclick="speakTerm(event)">🔊 Listen</button>
+                    <div class="hint-text">(Click card to reveal meaning)</div>
+                </div>
+                <div class="card-back">
+                    <div class="meaning" id="card-meaning">Meaning</div>
+                    <div class="context" id="card-context">Context & Local Usage</div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="ctrl-btn" id="prev-btn" onclick="prevCard()">Previous</button>
+            <span id="card-counter">1 / 10</span>
+            <button class="ctrl-btn" id="next-btn" onclick="nextCard()">Next</button>
+        </div>
+    </div>
+
+    <!-- QUIZ VIEW -->
+    <div id="quiz" class="view">
+        <div class="quiz-card">
+            <div class="quiz-question" id="quiz-q">Question text goes here...</div>
+            <div class="options-grid" id="quiz-options"></div>
+            <div class="quiz-feedback" id="quiz-feedback"></div>
+            <button class="ctrl-btn" id="quiz-next-btn" style="display:none; margin-top:15px;" onclick="nextQuestion()">Next Question</button>
+        </div>
+    </div>
+
+    <!-- CHEAT SHEET VIEW -->
+    <div id="cheatsheet" class="view">
+        <div class="cheat-sheet" id="cheat-list"></div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            {
+                term: "¿Qué onda, vale?",
+                phonetic: "KAY own-dah, VAH-lay",
+                meaning: "What's up, man/bro?",
+                context: "'Vale' is the go-to regional alternative to 'güey' in Jalisco. Used constantly to greet peers warmly.",
+                category: "Greetings & Slang"
+            },
+            {
+                term: "¡Ánimo!",
+                phonetic: "AH-nee-moh",
+                meaning: "Let's go! / Cheer up! / Have a good one!",
+                context: "Used universally in Vallarta as an energetic greeting, farewell, or way to say 'you're welcome'.",
+                category: "Greetings & Slang"
+            },
+            {
+                term: "Chico / Chingón",
+                phonetic: "CHEE-doh / cheen-GOHN",
+                meaning: "Cool / Awesome (Badass)",
+                context: "Use 'chido' for everyday nice things and 'chingón' when something genuinely impresses you.",
+                category: "Greetings & Slang"
+            },
+            {
+                term: "Feria",
+                phonetic: "FAY-ree-ah",
+                meaning: "Pocket change / Cash",
+                context: "Literally translates to 'fair', but used when asking for change from vendors or taxi drivers ('¿Tiene feria?').",
+                category: "Practical Phrases"
+            },
+            {
+                term: "Estar crudo",
+                phonetic: "ehs-TAHR CROO-doh",
+                meaning: "To be hungover",
+                context: "Literally 'to be raw'. Say 'Ando bien crudo' when ordering morning tacos after a late night.",
+                category: "Food & Bar"
+            },
+            {
+                term: "¡Aguas!",
+                phonetic: "AH-gwahs",
+                meaning: "Watch out! / Heads up!",
+                context: "Shouted on busy cobblestone streets, docks, or crowded spots to warn you of oncoming hazard.",
+                category: "Practical Phrases"
+            },
+            {
+                term: "Raicilla",
+                phonetic: "rye-see-YAH",
+                meaning: "Local Jalisco agave spirit",
+                context: "Distilled from wild agaves. Herbal, floral, and complex. Sip it slowly from a clay copita at room temp.",
+                category: "Food & Bar"
+            },
+            {
+                term: "Copita",
+                phonetic: "koh-PEE-tah",
+                meaning: "Traditional shallow clay vessel",
+                context: "The wide-mouthed clay dish used to drink neat Raicilla or Mezcal, allowing aromatics to open up.",
+                category: "Food & Bar"
+            },
+            {
+                term: "Sal de Gusano",
+                phonetic: "sahl day goo-SAH-noh",
+                meaning: "Agave-worm salt",
+                context: "Served on citrus slices alongside neat Raicilla to complement and open up the spirit's palate.",
+                category: "Food & Bar"
+            },
+            {
+                term: "Pescado Zarandeado",
+                phonetic: "pehs-KAH-doh sah-rahn-day-AH-doh",
+                meaning: "Adobo wood-grilled whole fish",
+                context: "The essential regional seafood dish of the Jalisco/Nayarit coast, butterflied and grilled over charcoal.",
+                category: "Food & Bar"
+            },
+            {
+                term: "Tejuino",
+                phonetic: "tay-HWEE-noh",
+                meaning: "Fermented cold corn beverage",
+                context: "Sweet/tart street drink made from fermented masa and piloncillo, served with lime sorbet and salt.",
+                category: "Food & Bar"
+            },
+            {
+                term: "Ahorita",
+                phonetic: "ah-oh-REE-tah",
+                meaning: "Right now (loose concept)",
+                context: "Can mean in 5 seconds, 1 hour, or never. Embrace the relaxed coastal pacing when you hear it!",
+                category: "Practical Phrases"
+            }
+        ];
+
+        let currentIndex = 0;
+        let currentQuizIndex = 0;
+
+        // Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'quiz') startQuiz();
+            if (tabId === 'cheatsheet') renderCheatSheet();
+        }
+
+        // Flashcards logic
+        function updateCard() {
+            const card = document.getElementById('card');
+            card.classList.remove('flipped');
+            setTimeout(() => {
+                const item = vocabulary[currentIndex];
+                document.getElementById('card-cat').innerText = item.category;
+                document.getElementById('card-term').innerText = item.term;
+                document.getElementById('card-phone').innerText = item.phonetic;
+                document.getElementById('card-meaning').innerText = item.meaning;
+                document.getElementById('card-context').innerText = item.context;
+                document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${vocabulary.length}`;
+                
+                document.getElementById('prev-btn').disabled = currentIndex === 0;
+                document.getElementById('next-btn').disabled = currentIndex === vocabulary.length - 1;
+            }, 150);
+        }
+
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < vocabulary.length - 1) {
+                currentIndex++;
+                updateCard();
+            }
+        }
+
+        function speakTerm(e) {
+            e.stopPropagation(); // Prevents card flipping when clicking speech button
+            const term = vocabulary[currentIndex].term.split('/')[0].replace('¡', '').replace('!', '');
+            const utterance = new SpeechSynthesisUtterance(term);
+            utterance.lang = 'es-MX';
+            speechSynthesis.speak(utterance);
+        }
+
+        // Quiz Logic
+        let quizQuestions = [];
+
+        function startQuiz() {
+            quizQuestions = [...vocabulary].sort(() => Math.random() - 0.5);
+            currentQuizIndex = 0;
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const item = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-q').innerText = `What does "${item.term}" mean?`;
+            document.getElementById('quiz-feedback').innerText = '';
+            document.getElementById('quiz-next-btn').style.display = 'none';
+
+            // Generate options
+            let options = [item.meaning];
+            while (options.length < 4) {
+                let randomItem = vocabulary[Math.floor(Math.random() * vocabulary.length)].meaning;
+                if (!options.includes(randomItem)) options.push(randomItem);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsGrid = document.getElementById('quiz-options');
+            optionsGrid.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(btn, opt, item.meaning);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedBtn, selectedOpt, correctOpt) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
+
+            if (selectedOpt === correctOpt) {
+                selectedBtn.classList.add('correct');
+                document.getElementById('quiz-feedback').innerText = "¡Exacto! That's correct.";
+                document.getElementById('quiz-feedback').style.color = "#2E7D32";
+            } else {
+                selectedBtn.classList.add('wrong');
+                buttons.forEach(b => {
+                    if (b.innerText === correctOpt) b.classList.add('correct');
+                });
+                document.getElementById('quiz-feedback').innerText = `Not quite! The correct answer is: ${correctOpt}`;
+                document.getElementById('quiz-feedback').style.color = "#C62828";
+            }
+
+            document.getElementById('quiz-next-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuestion();
+            } else {
+                document.getElementById('quiz-q').innerText = "🎉 Quiz Complete! You're ready for Vallarta.";
+                document.getElementById('quiz-options').innerHTML = '';
+                document.getElementById('quiz-feedback').innerText = '';
+                document.getElementById('quiz-next-btn').style.display = 'none';
+            }
+        }
+
+        // Cheat Sheet Logic
+        function renderCheatSheet() {
+            const listContainer = document.getElementById('cheat-list');
+            listContainer.innerHTML = '';
+            vocabulary.forEach(v => {
+                const item = document.createElement('div');
+                item.className = 'cheat-item';
+                item.innerHTML = `
+                    <div class="cheat-term">${v.term} <span style="font-weight:normal; color:#888;">(${v.phonetic})</span></div>
+                    <div><strong>Meaning:</strong> ${v.meaning}</div>
+                    <div style="font-size:0.9rem; color:#555;">${v.context}</div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Initialize
+        updateCard();
+    </script>
+</body>
+</html>
