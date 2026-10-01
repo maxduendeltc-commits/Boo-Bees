@@ -458,7 +458,6 @@
             margin-top: 5px;
         }
 
-        /* Menu Decoder Specific Banner Styling */
         .menu-banner {
             background: #EFEBE9;
             border-left: 5px solid var(--accent);
@@ -690,44 +689,19 @@
             <div class="info-title">Marina Vallarta Boardwalk & Lighthouse</div>
             <span class="attraction-tag">Yachts & Dining</span>
             <p>Upscale marina lined with luxury yachts, oceanfront restaurants, and the iconic lighthouse bar. Great evening stroll destination.</p>
-            
             <div class="transit-grid">
                 <div class="transit-item">🚶 Walking: <span>~45–50 min</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>8–10 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>10 min</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>10 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>15 min</span></div>
                 <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
             </div>
-
             <div style="margin-top: 10px; margin-bottom: 5px;">
                 <a href="https://www.google.com/maps/search/?api=1&query=Marina+Vallarta+Lighthouse" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Marina Lighthouse Pin in Google Maps ↗
+                    📍 Open Marina Pin in Google Maps ↗
                 </a>
             </div>
             <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "A la Marina Vallarta, por favor."
-            </div>
-        </div>
-
-        <!-- YELAPA & SOUTH BAY BEACHES -->
-        <div class="info-card">
-            <div class="info-title">Yelapa & South Shore Beaches</div>
-            <span class="attraction-tag">Day Trip Adventure</span>
-            <p>Car-free beach village with waterfalls, accessible primarily by water taxi (panga) departing from Los Muertos Pier or Boca de Tomatlán.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚕 Taxi to Boca: <span>~30–40 min</span></div>
-                <div class="transit-item">🚌 Bus to Boca: <span>~45 min</span></div>
-                <div class="transit-item">🛥️ Panga from PV: <span>~45 min</span></div>
-                <div class="transit-item">🛥️ Panga from Boca: <span>~30 min</span></div>
-            </div>
-
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Yelapa+Jalisco+Mexico" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Yelapa Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿A qué hora sale la última panga para regresar?" (What time does the last water taxi leave to return?)
+                🗣️ <strong>Phrase:</strong> "A Marina Vallarta, por favor."
             </div>
         </div>
     </div>
@@ -735,35 +709,27 @@
     <!-- SLANG QUIZ VIEW -->
     <div id="quiz" class="view">
         <div class="quiz-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <span class="category-tag" id="quiz-cat">Category</span>
-                <span id="quiz-score" style="font-weight: bold; color: var(--accent);">Score: 0</span>
-            </div>
-            <div class="quiz-question" id="quiz-q">Question text goes here...</div>
-            <div class="options-grid" id="quiz-options">
-                <!-- Options dynamically inserted -->
-            </div>
+            <div class="quiz-question" id="quiz-q">Loading Question...</div>
+            <div class="options-grid" id="quiz-options"></div>
             <div class="quiz-feedback" id="quiz-feedback"></div>
-            <div style="margin-top: 20px; text-align: right;">
-                <button class="ctrl-btn" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display: none;">Next Question ➔</button>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="ctrl-btn" onclick="nextQuizQuestion()">Next Question ➔</button>
             </div>
         </div>
     </div>
 
-    <!-- MENU DECODER QUIZ VIEW -->
+    <!-- MENU DECODER VIEW -->
     <div id="menuquiz" class="view">
         <div class="quiz-card">
             <div class="menu-banner">
-                <span class="dish-label">🌮 Vallarta Specialty Dish</span>
-                <span class="dish-title" id="menu-dish-title">Pescado Zarandeado</span>
+                <span class="dish-label">Menu Item</span>
+                <span class="dish-title" id="menu-dish">Loading Dish...</span>
             </div>
-            <div class="quiz-question" id="menu-q">What type of preparation is this local specialty?</div>
-            <div class="options-grid" id="menu-options">
-                <!-- Options dynamically inserted -->
-            </div>
+            <div class="quiz-question" id="menu-q">What is this regional specialty?</div>
+            <div class="options-grid" id="menu-options"></div>
             <div class="quiz-feedback" id="menu-feedback"></div>
-            <div style="margin-top: 20px; text-align: right;">
-                <button class="ctrl-btn" id="menu-next-btn" onclick="nextMenuQuestion()" style="display: none;">Next Dish ➔</button>
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="ctrl-btn secondary" onclick="nextMenuQuestion()">Next Dish ➔</button>
             </div>
         </div>
     </div>
@@ -771,248 +737,68 @@
     <!-- WEAK AREAS VIEW -->
     <div id="weakareas" class="view">
         <div class="cheat-sheet">
-            <div class="info-title" style="margin-bottom: 15px;">🎯 Practice Your Missed Terms</div>
-            <p style="color: var(--light-text); margin-bottom: 20px;">
-                Terms you missed in the quiz automatically show up here. Review them and practice until you've mastered them!
-            </p>
-            <div id="weak-list-container">
-                <!-- Weak list rendered dynamically -->
-            </div>
+            <h2 style="color: var(--primary); margin-bottom: 15px;">🎯 Missed Quiz Terms</h2>
+            <p style="margin-bottom: 15px; font-size: 0.95rem; color: #666;">Terms you miss during quizzes will automatically appear here for targeted practice.</p>
+            <div id="weak-list"></div>
         </div>
     </div>
 
     <!-- FAVORITES VIEW -->
     <div id="favorites" class="view">
         <div class="cheat-sheet">
-            <div class="info-title" style="margin-bottom: 15px;">⭐ Starred Terms & Favorites</div>
-            <p style="color: var(--light-text); margin-bottom: 20px;">
-                Your saved terms for quick study and reference during your trip.
-            </p>
-            <div id="fav-list-container">
-                <!-- Favorites list rendered dynamically -->
-            </div>
+            <h2 style="color: var(--primary); margin-bottom: 15px;">⭐ Starred Phrases</h2>
+            <div id="fav-list"></div>
         </div>
     </div>
 
-    <!-- CHEAT SHEET / QUICK REFERENCE VIEW -->
+    <!-- CHEAT SHEET VIEW -->
     <div id="cheatsheet" class="view">
-        <input type="text" id="search-input" class="search-box" placeholder="🔍 Search terms, phrases, or meanings..." oninput="filterCheatSheet()">
-        <div class="cheat-sheet" id="cheat-sheet-list">
-            <!-- Dynamically populated cheat sheet items -->
-        </div>
+        <input type="text" id="search-input" class="search-box" placeholder="🔎 Search terms, definitions, or categories..." oninput="filterCheatSheet()">
+        <div class="cheat-sheet" id="cheat-list"></div>
     </div>
 
     <script>
-        // Data Store: Local Slang, Expressions & Vallarta Vocabulary
-        const vocabData = [
-            {
-                term: "Pata Salada",
-                phone: "pah-tah sah-lah-dah",
-                meaning: "Salty Foot / True Local",
-                category: "Local Identity",
-                context: "A nickname for people born and raised in Puerto Vallarta. Example: 'Él es 100% pata salada.'"
-            },
-            {
-                term: "¿Qué onda?",
-                phone: "keh ohn-dah",
-                meaning: "What's up? / How's it going?",
-                category: "Greetings",
-                context: "Very common casual greeting across Mexico. Used with friends, waiters, or shopkeepers."
-            },
-            {
-                term: "Chilo / Chilo!",
-                phone: "chee-loh",
-                meaning: "Cool / Awesome",
-                category: "Local Slang",
-                context: "Pacific coast slang for 'cool' or 'nice' (equivalent to 'padre' or 'chido'). '¡Está bien chilo este lugar!'"
-            },
-            {
-                term: "Panga",
-                phone: "pahn-gah",
-                meaning: "Open Motorboat / Water Taxi",
-                category: "Transport",
-                context: "Small skiff used to get to south bay beaches like Yelapa, Las Animas, or Quimixto from Los Muertos Pier."
-            },
-            {
-                term: "Cerveza Pacífico",
-                phone: "sehr-veh-sah pah-see-fee-koh",
-                meaning: "Local Pacific Coast Pilsner",
-                category: "Drinks",
-                context: "Brewed originally in Mazatlán, Pacífico is the quintessential crisp beach beer of Vallarta."
-            },
-            {
-                term: "Camote",
-                phone: "kah-moh-teh",
-                meaning: "Sweet Potato / (Slang) Sweetheart/Buddy",
-                category: "Local Food & Slang",
-                context: "Literally sweet potato, but vendor calls ('¡Camotes!') echo in towns. Also used playfully as a friendly nickname."
-            },
-            {
-                term: "Camaronero",
-                phone: "kah-mah-roh-neh-roh",
-                meaning: "Shrimp Boat / Fisherman",
-                category: "Coastal Life",
-                context: "Refers to local shrimp fishermen or boats operating around Banderas Bay."
-            },
-            {
-                term: "Propina",
-                phone: "proh-pee-nah",
-                meaning: "Tip / Gratuity",
-                category: "Dining & Services",
-                context: "Standard tip at PV restaurants is 10%-15%. Always check 'Propina Incluida' on the bill."
-            },
-            {
-                term: "¿Cuánto es lo menos?",
-                phone: "kwahn-toh ess loh meh-nohs",
-                meaning: "What's your best price?",
-                category: "Bargaining",
-                context: "Polite way to ask for a slight discount when buying crafts or souvenirs at open-air flea markets."
-            },
-            {
-                term: "Ahorita",
-                phone: "ah-oh-ree-tah",
-                meaning: "Right now... (or eventually!)",
-                category: "Time Concept",
-                context: "Diminutive of 'ahora'. Can mean in 5 seconds, 5 hours, or never! Embrace the relaxed tempo."
-            },
-            {
-                term: "La Cuarta",
-                phone: "lah kwahr-tah",
-                meaning: "A short distance / block away",
-                category: "Directions",
-                context: "Used by locals when giving walking directions along street grids."
-            },
-            {
-                term: "Malecón",
-                phone: "mah-leh-kohn",
-                meaning: "Oceanfront Boardwalk",
-                category: "Landmarks",
-                context: "The 12-block boardwalk along central PV famous for sculptures, street food, and sunsets."
-            }
+        const cardsData = [
+            { term: "¡Qué onda!", phone: "keh OHN-dah", meaning: "What's up? / How's it going?", context: "Ultra-common casual greeting across Jalisco.", cat: "Slang" },
+            { term: "Pata salada", phone: "PAH-tah sah-LAH-dah", meaning: "Salted foot (Vallarta local)", context: "Affectionate nickname for people born and raised in Puerto Vallarta.", cat: "Local Culture" },
+            { term: "Camión", phone: "kah-MYOHN", meaning: "City bus", context: "In Mexico, 'autobús' is long-distance; local city buses are 'camiones'.", cat: "Logistics" },
+            { term: "Panga", phone: "PAHN-gah", meaning: "Small motorboat / Water taxi", context: "Skiffs used to reach southern beaches like Boca, Yelapa, and Animas.", cat: "Transport" },
+            { term: "Pescado Zarandeado", phone: "pes-KAH-doh sah-rahn-deh-AH-doh", meaning: "Barbecued butterflied fish", context: "Nayarit & Jalisco coastal specialty grilled over wood charcoal.", cat: "Menu" },
+            { term: "Agua de Tuba", phone: "AH-gwah deh TOO-bah", meaning: "Coconut palm sap drink", context: "Refreshingly sweet traditional drink sold by boardwalk vendors with apples & walnuts.", cat: "Menu" },
+            { term: "Chilango", phone: "chee-LAHN-goh", meaning: "Person from Mexico City", context: "Widely used term across PV for visitors and expats from CDMX.", cat: "Slang" },
+            { term: "La Cuenta", phone: "lah KWEN-tah", meaning: "The bill / check", context: "Say 'La cuenta, por favor' to signal for your bill at restaurants.", cat: "Dining" },
+            { term: "Propina", phone: "proh-PEE-nah", meaning: "Tip", context: "Standard restaurant tip is 10%-15%. Look for 'Propina Incluida' on bills.", cat: "Dining" },
+            { term: "Ahorita", phone: "ah-oh-REE-tah", meaning: "Right now / Soon / Eventually", context: "Flexible Mexican time expression meaning anywhere from 5 seconds to never.", cat: "Slang" }
         ];
 
-        // Data Store: Menu Decoder Quiz Items
         const menuData = [
-            {
-                dish: "Pescado Zarandeado",
-                question: "What style of cooking is 'Zarandeado' in coastal Jalisco?",
-                options: [
-                    "Split, marinated in achiote/chili paste, and wood-grilled",
-                    "Deep-fried whole fish served with lime",
-                    "Raw fish cured in lime juice and cucumber",
-                    "Boiled fish stew cooked with tomatoes and olives"
-                ],
-                correct: 0,
-                explanation: "Zarandeado is an iconic local Nayarit/Jalisco style: split open, seasoned with achiote, chili, garlic, and soy sauce, then slow-grilled over wood embers."
-            },
-            {
-                dish: "Agua de Tuba",
-                question: "What traditional Vallarta boardwalk drink is Tuba made from?",
-                options: [
-                    "Fermented coconut palm sap topped with diced apple & walnuts",
-                    "Sweetened hibiscus flower tea with cinnamon",
-                    "Rice milk flavored with vanilla and condensed milk",
-                    "Blended watermelon and lime juice"
-                ],
-                correct: 0,
-                explanation: "Tuba is brought by tuberos who harvest coconut palm sap. It's served chilled with ice, finely chopped red apple, and roasted peanuts or walnuts."
-            },
-            {
-                dish: "Aguachile Verde",
-                question: "How is Aguachile prepared differently from traditional ceviche?",
-                options: [
-                    "Fresh raw shrimp served immediately in raw lime & blended serrano/cilantro broth",
-                    "Fish cooked overnight in hot vinegar marinade",
-                    "Poached seafood served with warm tomato sauce",
-                    "Smoked seafood served cold with mayonnaise"
-                ],
-                correct: 0,
-                explanation: "Aguachile uses raw butterflied shrimp flash-marinated in lime juice mixed with blended fresh chilies, cucumber, and red onion, served immediately so it stays crisp."
-            },
-            {
-                dish: "Raicilla",
-                question: "What is Raicilla, the native spirit of Puerto Vallarta and Jalisco coast?",
-                options: [
-                    "An artisanal agave spirit (Mezcal DO) made from wild coastal agave",
-                    "A sweet liqueur made from fermented sugarcane and pineapple",
-                    "A dark rum aged in tequila barrels",
-                    "A spiced coffee drink served with flamed brandy"
-                ],
-                correct: 0,
-                explanation: "Raicilla has Denomination of Origin in Jalisco. Made from wild agaves (like Maximiliana and Inaequidens), it offers herbal, floral, and smoky local flavor profiles."
-            },
-            {
-                dish: "Tacos de Birria de Res",
-                question: "What makes Jalisco birria tacos distinct when served at local street stands?",
-                options: [
-                    "Slow-braised spiced meat served in tortillas dipped in consommé broth & grilled crispy",
-                    "Raw fish topped with shredded cabbage and creamy tartar sauce",
-                    "Grilled cactus with melted cheese and salsa verde",
-                    "Pork roasted on a vertical spit with pineapple slices"
-                ],
-                correct: 0,
-                explanation: "Birria in Jalisco is braised with rich spices (chiles, cloves, cumin). Tacos are often 'crispy' (dorados) because tortillas are dipped in the top fat layer of broth before griddling."
-            }
+            { dish: "Pescado Zarandeado", options: ["Charcoal grilled butterflied whole fish", "Raw fish cured in lime juice", "Deep fried fish tacos", "Fish stew with tomato"], correct: 0 },
+            { dish: "Birria de Chivo", options: ["Slow-braised spiced goat stew", "Grilled beef flank steak", "Fried pork belly chunks", "Chicken in brown mole"], correct: 0 },
+            { dish: "Agua de Tuba", options: ["Chilled coconut palm sap beverage", "Fermented corn drink", "Hibiscus iced tea", "Horchata with cinnamon"], correct: 0 },
+            { dish: "Aguachile", options: ["Raw shrimp cured in lime with chili & cucumber", "Boiled shrimp cocktail with ketchup", "Seafood chowder with cream", "Grilled octopus skewered"], correct: 0 }
         ];
 
-        // State variables
-        let currentCardIndex = 0;
-        let starredTerms = new Set(JSON.parse(localStorage.getItem('pv_starred_terms') || '[]'));
-        let weakTerms = new Set(JSON.parse(localStorage.getItem('pv_weak_terms') || '[]'));
-        let quizIndex = 0;
-        let quizScore = 0;
-        let quizAnswered = false;
-        let menuIndex = 0;
-        let menuScore = 0;
-        let menuAnswered = false;
+        let currentIndex = 0;
+        let starredSet = new Set();
+        let weakSet = new Set();
+        let currentQuizIndex = 0;
+        let currentMenuIndex = 0;
 
-        // On Load Initialization
-        window.onload = function() {
-            renderCard();
-            updateCounts();
-            renderCheatSheet();
-            initQuiz();
-            initMenuQuiz();
-        };
-
-        // Navigation Tab Switching
-        function switchTab(tabId, event) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        function updateCard() {
+            const item = cardsData[currentIndex];
+            document.getElementById('card-cat').innerText = item.cat;
+            document.getElementById('card-term').innerText = item.term;
+            document.getElementById('card-phone').innerText = item.phone;
+            document.getElementById('card-meaning').innerText = item.meaning;
+            document.getElementById('card-context').innerText = item.context;
+            document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${cardsData.length}`;
             
-            document.getElementById(tabId).classList.add('active');
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
+            const starBtn = document.getElementById('card-star');
+            starBtn.classList.toggle('starred', starredSet.has(item.term));
 
-            if (tabId === 'weakareas') renderWeakAreas();
-            if (tabId === 'favorites') renderFavorites();
-        }
-
-        // Flashcard Logic
-        function renderCard() {
-            const item = vocabData[currentCardIndex];
-            const card = document.getElementById('card');
-            card.classList.remove('flipped');
-
-            setTimeout(() => {
-                document.getElementById('card-cat').textContent = item.category;
-                document.getElementById('card-term').textContent = item.term;
-                document.getElementById('card-phone').textContent = item.phone;
-                document.getElementById('card-meaning').textContent = item.meaning;
-                document.getElementById('card-context').textContent = item.context;
-                document.getElementById('card-counter').textContent = `${currentCardIndex + 1} / ${vocabData.length}`;
-
-                const starBtn = document.getElementById('card-star');
-                if (starredTerms.has(item.term)) {
-                    starBtn.classList.add('starred');
-                } else {
-                    starBtn.classList.remove('starred');
-                }
-
-                document.getElementById('prev-btn').disabled = (currentCardIndex === 0);
-                document.getElementById('next-btn').disabled = (currentCardIndex === vocabData.length - 1);
-            }, 150);
+            document.getElementById('card').classList.remove('flipped');
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === cardsData.length - 1;
         }
 
         function flipCard() {
@@ -1020,279 +806,142 @@
         }
 
         function nextCard() {
-            if (currentCardIndex < vocabData.length - 1) {
-                currentCardIndex++;
-                renderCard();
+            if (currentIndex < cardsData.length - 1) {
+                currentIndex++;
+                updateCard();
             }
         }
 
         function prevCard() {
-            if (currentCardIndex > 0) {
-                currentCardIndex--;
-                renderCard();
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
             }
         }
 
-        // Star / Favorites management
         function toggleStarCurrent(e) {
             e.stopPropagation();
-            const term = vocabData[currentCardIndex].term;
-            if (starredTerms.has(term)) {
-                starredTerms.delete(term);
-            } else {
-                starredTerms.add(term);
-            }
-            localStorage.setItem('pv_starred_terms', JSON.stringify([...starredTerms]));
-            renderCard();
-            updateCounts();
-        }
-
-        function toggleStarTerm(term) {
-            if (starredTerms.has(term)) {
-                starredTerms.delete(term);
-            } else {
-                starredTerms.add(term);
-            }
-            localStorage.setItem('pv_starred_terms', JSON.stringify([...starredTerms]));
-            updateCounts();
+            const term = cardsData[currentIndex].term;
+            if (starredSet.has(term)) starredSet.delete(term);
+            else starredSet.add(term);
+            
+            document.getElementById('card-star').classList.toggle('starred', starredSet.has(term));
+            document.getElementById('fav-count').innerText = starredSet.size;
             renderFavorites();
-            renderCard();
         }
 
-        function updateCounts() {
-            document.getElementById('fav-count').textContent = starredTerms.size;
-            document.getElementById('weak-count').textContent = weakTerms.size;
-        }
-
-        // Audio Synthesis (Web Speech API)
         function speakTerm(e) {
-            if (e) e.stopPropagation();
-            const term = vocabData[currentCardIndex].term;
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(term);
-                utterance.lang = 'es-MX';
-                utterance.rate = 0.9;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                alert("Speech synthesis not supported in this browser.");
-            }
+            e.stopPropagation();
+            const term = cardsData[currentIndex].term;
+            const msg = new SpeechSynthesisUtterance(term);
+            msg.lang = 'es-MX';
+            window.speechSynthesis.speak(msg);
         }
 
-        // Tipping & Peso Converter
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            if(event) event.currentTarget.classList.add('active');
+
+            if(tabId === 'quiz') loadQuizQuestion();
+            if(tabId === 'menuquiz') loadMenuQuestion();
+            if(tabId === 'cheatsheet') renderCheatSheet(cardsData);
+            if(tabId === 'weakareas') renderWeakAreas();
+            if(tabId === 'favorites') renderFavorites();
+        }
+
         function convertPesos() {
             const val = parseFloat(document.getElementById('peso-input').value) || 0;
             const usd = (val / 20).toFixed(2);
-            document.getElementById('usd-output').textContent = `$${usd} USD`;
+            document.getElementById('usd-output').innerText = `$${usd} USD`;
         }
 
-        // Slang Quiz Logic
-        function initQuiz() {
-            quizIndex = 0;
-            quizScore = 0;
-            renderQuizQuestion();
-        }
-
-        function renderQuizQuestion() {
-            quizAnswered = false;
-            document.getElementById('quiz-feedback').textContent = '';
-            document.getElementById('quiz-next-btn').style.display = 'none';
-
-            const item = vocabData[quizIndex];
-            document.getElementById('quiz-cat').textContent = item.category;
-            document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
-            document.getElementById('quiz-q').textContent = `What does "${item.term}" mean?`;
-
-            // Options: Correct answer + 3 random distractors
-            const options = [item.meaning];
-            const otherMeanings = vocabData.filter(v => v.term !== item.term).map(v => v.meaning);
+        /* Quiz Logic */
+        function loadQuizQuestion() {
+            const qItem = cardsData[currentQuizIndex];
+            document.getElementById('quiz-q').innerText = `What does "${qItem.term}" mean?`;
+            document.getElementById('quiz-feedback').innerText = '';
             
-            // Shuffle and select 3 distractors
-            otherMeanings.sort(() => 0.5 - Math.random());
-            for (let i = 0; i < 3 && i < otherMeanings.length; i++) {
-                options.push(otherMeanings[i]);
+            const options = [qItem.meaning];
+            while(options.length < 4) {
+                const rand = cardsData[Math.floor(Math.random() * cardsData.length)].meaning;
+                if(!options.includes(rand)) options.push(rand);
             }
-            options.sort(() => 0.5 - Math.random());
+            options.sort(() => Math.random() - 0.5);
 
-            const container = document.getElementById('quiz-options');
-            container.innerHTML = '';
+            const grid = document.getElementById('quiz-options');
+            grid.innerHTML = '';
             options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.textContent = opt;
-                btn.onclick = () => checkQuizAnswer(opt, item.meaning, item.term, btn);
-                container.appendChild(btn);
+                btn.innerText = opt;
+                btn.onclick = () => checkQuiz(btn, opt === qItem.meaning, qItem.term);
+                grid.appendChild(btn);
             });
         }
 
-        function checkQuizAnswer(selected, correct, term, btn) {
-            if (quizAnswered) return;
-            quizAnswered = true;
-
-            const allBtns = document.querySelectorAll('#quiz-options .option-btn');
-            allBtns.forEach(b => {
-                if (b.textContent === correct) b.classList.add('correct');
-            });
-
-            if (selected === correct) {
+        function checkQuiz(btn, isCorrect, term) {
+            const feedback = document.getElementById('quiz-feedback');
+            if(isCorrect) {
                 btn.classList.add('correct');
-                quizScore += 10;
-                document.getElementById('quiz-feedback').textContent = "🎉 ¡Excelente! That's correct.";
-                document.getElementById('quiz-feedback').style.color = "#2E7D32";
-                // Remove from weak terms if previously added
-                if (weakTerms.has(term)) {
-                    weakTerms.delete(term);
-                    localStorage.setItem('pv_weak_terms', JSON.stringify([...weakTerms]));
-                    updateCounts();
-                }
+                feedback.style.color = '#2E7D32';
+                feedback.innerText = '✨ Correcto!';
             } else {
                 btn.classList.add('wrong');
-                document.getElementById('quiz-feedback').textContent = `❌ Not quite! Correct: "${correct}"`;
-                document.getElementById('quiz-feedback').style.color = "#C62828";
-                // Add to weak terms
-                weakTerms.add(term);
-                localStorage.setItem('pv_weak_terms', JSON.stringify([...weakTerms]));
-                updateCounts();
+                feedback.style.color = '#C62828';
+                feedback.innerText = '❌ Incorrect. Added to Weak Areas.';
+                weakSet.add(term);
+                document.getElementById('weak-count').innerText = weakSet.size;
             }
-
-            document.getElementById('quiz-score').textContent = `Score: ${quizScore}`;
-            document.getElementById('quiz-next-btn').style.display = 'inline-block';
         }
 
         function nextQuizQuestion() {
-            quizIndex = (quizIndex + 1) % vocabData.length;
-            renderQuizQuestion();
+            currentQuizIndex = (currentQuizIndex + 1) % cardsData.length;
+            loadQuizQuestion();
         }
 
-        // Menu Decoder Quiz Logic
-        function initMenuQuiz() {
-            menuIndex = 0;
-            renderMenuQuestion();
-        }
-
-        function renderMenuQuestion() {
-            menuAnswered = false;
-            document.getElementById('menu-feedback').textContent = '';
-            document.getElementById('menu-next-btn').style.display = 'none';
-
-            const item = menuData[menuIndex];
-            document.getElementById('menu-dish-title').textContent = item.dish;
-            document.getElementById('menu-q').textContent = item.question;
-
-            const container = document.getElementById('menu-options');
-            container.innerHTML = '';
+        /* Menu Decoder Quiz */
+        function loadMenuQuestion() {
+            const item = menuData[currentMenuIndex];
+            document.getElementById('menu-dish').innerText = item.dish;
+            document.getElementById('menu-feedback').innerText = '';
+            
+            const grid = document.getElementById('menu-options');
+            grid.innerHTML = '';
             item.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.textContent = opt;
-                btn.onclick = () => checkMenuAnswer(idx, item.correct, item.explanation, btn);
-                container.appendChild(btn);
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const isCorrect = idx === item.correct;
+                    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+                    document.getElementById('menu-feedback').innerText = isCorrect ? '✨ ¡Buen provecho! Correct.' : '❌ Not quite!';
+                };
+                grid.appendChild(btn);
             });
-        }
-
-        function checkMenuAnswer(selectedIdx, correctIdx, explanation, btn) {
-            if (menuAnswered) return;
-            menuAnswered = true;
-
-            const allBtns = document.querySelectorAll('#menu-options .option-btn');
-            allBtns[correctIdx].classList.add('correct');
-
-            if (selectedIdx === correctIdx) {
-                btn.classList.add('correct');
-                document.getElementById('menu-feedback').innerHTML = `🎉 <strong>Correct!</strong> ${explanation}`;
-                document.getElementById('menu-feedback').style.color = "#2E7D32";
-            } else {
-                btn.classList.add('wrong');
-                document.getElementById('menu-feedback').innerHTML = `❌ <strong>Incorrect.</strong> ${explanation}`;
-                document.getElementById('menu-feedback').style.color = "#C62828";
-            }
-
-            document.getElementById('menu-next-btn').style.display = 'inline-block';
         }
 
         function nextMenuQuestion() {
-            menuIndex = (menuIndex + 1) % menuData.length;
-            renderMenuQuestion();
+            currentMenuIndex = (currentMenuIndex + 1) % menuData.length;
+            loadMenuQuestion();
         }
 
-        // Weak Areas List Render
-        function renderWeakAreas() {
-            const container = document.getElementById('weak-list-container');
+        /* Render Helpers */
+        function renderCheatSheet(list) {
+            const container = document.getElementById('cheat-list');
             container.innerHTML = '';
-
-            if (weakTerms.size === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 30px; color: #888;">
-                        🎉 No weak areas recorded yet! Test your knowledge in the <strong>Slang Quiz</strong> tab.
-                    </div>`;
-                return;
-            }
-
-            vocabData.filter(v => weakTerms.has(v.term)).forEach(item => {
+            list.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'cheat-item';
                 div.innerHTML = `
                     <div>
-                        <div class="cheat-term">${item.term} <span style="font-size: 0.85rem; color: var(--accent); font-weight: normal;">(${item.phone})</span></div>
-                        <div style="font-weight: bold; margin-top: 2px;">${item.meaning}</div>
+                        <div class="cheat-term">${item.term}</div>
+                        <div style="font-size:0.9rem; color:#555;">${item.meaning}</div>
                         <div class="hint-text">${item.context}</div>
                     </div>
-                    <button class="ctrl-btn secondary" style="padding: 6px 12px; font-size: 0.85rem;" onclick="removeWeakTerm('${item.term}')">Mastered ✓</button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function removeWeakTerm(term) {
-            weakTerms.delete(term);
-            localStorage.setItem('pv_weak_terms', JSON.stringify([...weakTerms]));
-            updateCounts();
-            renderWeakAreas();
-        }
-
-        // Favorites List Render
-        function renderFavorites() {
-            const container = document.getElementById('fav-list-container');
-            container.innerHTML = '';
-
-            if (starredTerms.size === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 30px; color: #888;">
-                        ⭐ No starred terms yet! Click the star icon on any flashcard to save terms here.
-                    </div>`;
-                return;
-            }
-
-            vocabData.filter(v => starredTerms.has(v.term)).forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'cheat-item';
-                div.innerHTML = `
-                    <div>
-                        <div class="cheat-term">${item.term} <span style="font-size: 0.85rem; color: var(--accent); font-weight: normal;">(${item.phone})</span></div>
-                        <div style="font-weight: bold; margin-top: 2px;">${item.meaning}</div>
-                        <div class="hint-text">${item.context}</div>
-                    </div>
-                    <button class="star-btn starred" style="position: static;" onclick="toggleStarTerm('${item.term}')">★</button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        // Quick Reference / Cheat Sheet Search & Render
-        function renderCheatSheet() {
-            const container = document.getElementById('cheat-sheet-list');
-            container.innerHTML = '';
-
-            vocabData.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'cheat-item';
-                div.setAttribute('data-search', `${item.term} ${item.meaning} ${item.category} ${item.context}`.toLowerCase());
-                div.innerHTML = `
-                    <div>
-                        <div class="cheat-term">${item.term} <span style="font-size: 0.85rem; color: var(--accent); font-weight: normal;">(${item.phone})</span></div>
-                        <div style="font-weight: bold; margin-top: 2px;">${item.meaning}</div>
-                        <div class="hint-text">${item.context}</div>
-                    </div>
-                    <span class="category-tag" style="position: static;">${item.category}</span>
+                    <span class="category-tag">${item.cat}</span>
                 `;
                 container.appendChild(div);
             });
@@ -1300,17 +949,46 @@
 
         function filterCheatSheet() {
             const query = document.getElementById('search-input').value.toLowerCase();
-            const items = document.querySelectorAll('#cheat-sheet-list .cheat-item');
+            const filtered = cardsData.filter(c => 
+                c.term.toLowerCase().includes(query) || 
+                c.meaning.toLowerCase().includes(query) ||
+                c.cat.toLowerCase().includes(query)
+            );
+            renderCheatSheet(filtered);
+        }
 
-            items.forEach(item => {
-                const text = item.getAttribute('data-search');
-                if (text.includes(query)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+        function renderWeakAreas() {
+            const container = document.getElementById('weak-list');
+            container.innerHTML = '';
+            if(weakSet.size === 0) {
+                container.innerHTML = '<p>No weak areas yet! Keep practicing the quiz.</p>';
+                return;
+            }
+            cardsData.filter(c => weakSet.has(c.term)).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'cheat-item';
+                div.innerHTML = `<div><div class="cheat-term">${item.term}</div><div>${item.meaning}</div></div>`;
+                container.appendChild(div);
             });
         }
+
+        function renderFavorites() {
+            const container = document.getElementById('fav-list');
+            container.innerHTML = '';
+            if(starredSet.size === 0) {
+                container.innerHTML = '<p>No starred phrases. Click the star on any flashcard to save it here!</p>';
+                return;
+            }
+            cardsData.filter(c => starredSet.has(c.term)).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'cheat-item';
+                div.innerHTML = `<div><div class="cheat-term">${item.term}</div><div>${item.meaning}</div></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize First Card
+        updateCard();
     </script>
 </body>
 </html>
