@@ -482,19 +482,74 @@
             color: var(--accent);
             font-weight: bold;
         }
+
+        /* Scavenger Hunt Styles */
+        .hunt-progress-bar {
+            width: 100%;
+            background-color: #E0E0E0;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 18px;
+            margin: 12px 0 20px 0;
+        }
+
+        .hunt-progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .hunt-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #F9F9F9;
+            border: 1px solid #E0E0E0;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+
+        .hunt-item.completed {
+            background: #E8F5E9;
+            border-color: #C8E6C9;
+            text-decoration: line-through;
+            color: #555;
+        }
+
+        .hunt-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .hunt-title {
+            font-weight: bold;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .hunt-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>🌴 Puerto Vallarta Slang & Local Guide</h1>
-        <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, and attractions.</p>
+        <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, attractions, and scavenger hunt.</p>
     </header>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('flashcards', event)">Flashcards</button>
         <button class="tab-btn" onclick="switchTab('logistics', event)">🚖 Hotel & Currency</button>
         <button class="tab-btn" onclick="switchTab('attractions', event)">📍 Attractions</button>
+        <button class="tab-btn" onclick="switchTab('scavenger', event)">📸 Scavenger Hunt</button>
         <button class="tab-btn" onclick="switchTab('quiz', event)">Slang Quiz</button>
         <button class="tab-btn" onclick="switchTab('menuquiz', event)">Menu Decoder</button>
         <button class="tab-btn" onclick="switchTab('weakareas', event)">🎯 Weak Areas (<span id="weak-count">0</span>)</button>
@@ -671,7 +726,7 @@
                 <div class="transit-item">🚶 Walking: <span>~45 min</span></div>
                 <div class="transit-item">🚕 Taxi / Uber: <span>10–12 min</span></div>
                 <div class="transit-item">🚌 Public Bus: <span>15 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
+                <div class="transit-item">🛥️️ Water Taxi: <span>N/A</span></div>
             </div>
 
             <div style="margin-top: 10px; margin-bottom: 5px;">
@@ -703,6 +758,24 @@
             <div class="phrase-box">
                 🗣️ <strong>Phrase:</strong> "A Marina Vallarta, por favor."
             </div>
+        </div>
+    </div>
+
+    <!-- SCAVENGER HUNT VIEW -->
+    <div id="scavenger" class="view">
+        <div class="cheat-sheet">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <h2 style="color: var(--primary);">📸 Puerto Vallarta Scavenger Hunt</h2>
+                <button class="ctrl-btn secondary" style="padding: 6px 12px; font-size: 0.85rem;" onclick="resetScavenger()">Reset Progress</button>
+            </div>
+            <p style="margin-top: 5px; color: var(--light-text); font-size: 0.95rem;">Check off items as you explore Vallarta! Take photos along the way to document your trip.</p>
+            
+            <div style="margin-top: 15px; font-weight: bold;" id="hunt-status">0 / 8 Completed (0%)</div>
+            <div class="hunt-progress-bar">
+                <div class="hunt-progress-fill" id="hunt-progress"></div>
+            </div>
+
+            <div id="hunt-list"></div>
         </div>
     </div>
 
@@ -778,11 +851,23 @@
             { dish: "Aguachile", options: ["Raw shrimp cured in lime with chili & cucumber", "Boiled shrimp cocktail with ketchup", "Seafood chowder with cream", "Grilled octopus skewered"], correct: 0 }
         ];
 
+        const huntData = [
+            { id: 1, title: "Boy on the Seahorse (El Niño sobre el Caballo de Mar)", desc: "Find and snap a photo with Rafael Zamarripa's iconic bronze statue on the Malecón." },
+            { id: 2, title: "Agua de Tuba Vendor", desc: "Spot a street vendor carrying a large palm tuba container and try or photograph the drink." },
+            { id: 3, title: "Parroquia Crown", desc: "Get a clear picture of the wrought-iron crown topping the Church of Our Lady of Guadalupe." },
+            { id: 4, title: "Order Food in Spanish", desc: "Use 'La cuenta, por favor' or order your meal entirely using Spanish phrases." },
+            { id: 5, title: "Los Muertos Sail Pier", desc: "Walk to the end of the sail-shaped Los Muertos Pier in Zona Romántica." },
+            { id: 6, title: "Local Craft Beer or Cocktail", desc: "Enjoy a local craft beer or Mexican cocktail at a beachside bar." },
+            { id: 7, title: "Cobblestone Alley View", desc: "Take a scenic photo down one of Zona Romántica's historic cobblestone side-streets." },
+            { id: 8, title: "Pacific Sunset", desc: "Capture a sunset photo looking out over Banderas Bay from the Malecón or beach." }
+        ];
+
         let currentIndex = 0;
         let starredSet = new Set();
         let weakSet = new Set();
         let currentQuizIndex = 0;
         let currentMenuIndex = 0;
+        let completedHunt = new Set();
 
         function updateCard() {
             const item = cardsData[currentIndex];
@@ -850,12 +935,58 @@
             if(tabId === 'cheatsheet') renderCheatSheet(cardsData);
             if(tabId === 'weakareas') renderWeakAreas();
             if(tabId === 'favorites') renderFavorites();
+            if(tabId === 'scavenger') renderScavenger();
         }
 
         function convertPesos() {
             const val = parseFloat(document.getElementById('peso-input').value) || 0;
             const usd = (val / 20).toFixed(2);
             document.getElementById('usd-output').innerText = `$${usd} USD`;
+        }
+
+        /* Scavenger Hunt Logic */
+        function renderScavenger() {
+            const container = document.getElementById('hunt-list');
+            container.innerHTML = '';
+
+            huntData.forEach(item => {
+                const isChecked = completedHunt.has(item.id);
+                const div = document.createElement('div');
+                div.className = `hunt-item ${isChecked ? 'completed' : ''}`;
+                div.innerHTML = `
+                    <input type="checkbox" id="hunt-${item.id}" ${isChecked ? 'checked' : ''} onchange="toggleHunt(${item.id})">
+                    <div>
+                        <div class="hunt-title">${item.title}</div>
+                        <div class="hunt-desc">${item.desc}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            updateHuntProgress();
+        }
+
+        function toggleHunt(id) {
+            if (completedHunt.has(id)) {
+                completedHunt.delete(id);
+            } else {
+                completedHunt.add(id);
+            }
+            renderScavenger();
+        }
+
+        function updateHuntProgress() {
+            const total = huntData.length;
+            const count = completedHunt.size;
+            const pct = Math.round((count / total) * 100);
+
+            document.getElementById('hunt-status').innerText = `${count} / ${total} Completed (${pct}%)`;
+            document.getElementById('hunt-progress').style.width = `${pct}%`;
+        }
+
+        function resetScavenger() {
+            completedHunt.clear();
+            renderScavenger();
         }
 
         /* Quiz Logic */
