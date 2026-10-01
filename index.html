@@ -1,1421 +1,503 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puerto Vallarta Slang & Local Guide</title>
-    <style>
-        :root {
-            --primary: #008080;
-            --primary-dark: #005959;
-            --accent: #E65100;
-            --bg: #F4F7F6;
-            --card-bg: #FFFFFF;
-            --text: #2C3E50;
-            --light-text: #666666;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --radius: 12px;
-            --star-gold: #FFB300;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        header h1 {
-            color: var(--primary);
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        header p {
-            color: var(--light-text);
-        }
-
-        /* Navigation / Mode Selection */
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            background: #E0E0E0;
-            border: none;
-            padding: 10px 16px;
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text);
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .tab-btn:hover:not(.active) {
-            background: #D0D0D0;
-        }
-
-        /* Views */
-        .view {
-            display: none;
-        }
-
-        .view.active {
-            display: block;
-        }
-
-        /* Flashcard Styles */
-        .card-container {
-            perspective: 1000px;
-            height: 330px;
-            margin-bottom: 20px;
-        }
-
-        .flashcard {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-            cursor: pointer;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: var(--radius);
-            background: var(--card-bg);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .card-back {
-            transform: rotateY(180deg);
-            background: #FAFAFA;
-            border: 2px solid var(--primary);
-        }
-
-        .category-tag {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #E0F2F1;
-            color: var(--primary-dark);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .star-btn {
-            position: absolute;
-            top: 12px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #CCC;
-            transition: color 0.2s, transform 0.1s;
-        }
-
-        .star-btn.starred {
-            color: var(--star-gold);
-        }
-
-        .star-btn:hover {
-            transform: scale(1.2);
-        }
-
-        .term {
-            font-size: 2.1rem;
-            font-weight: bold;
-            color: var(--primary-dark);
-            margin-bottom: 8px;
-        }
-
-        .phonetic {
-            font-style: italic;
-            color: var(--accent);
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-        }
-
-        .meaning {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-        .context {
-            color: var(--light-text);
-            font-size: 0.95rem;
-            max-width: 90%;
-        }
-
-        .audio-btn {
-            background: #E0F2F1;
-            border: none;
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 8px;
-            color: var(--primary-dark);
-            transition: background 0.2s;
-        }
-
-        .audio-btn:hover {
-            background: #B2DFDB;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        .ctrl-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .ctrl-btn.secondary {
-            background: var(--accent);
-        }
-
-        .ctrl-btn:disabled {
-            background: #CCC;
-            cursor: not-allowed;
-        }
-
-        /* Quiz Styles */
-        .quiz-card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .quiz-question {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        @media(min-width: 600px) {
-            .options-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .option-btn {
-            background: #F0F0F0;
-            border: 2px solid #E0E0E0;
-            padding: 15px;
-            border-radius: var(--radius);
-            text-align: left;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-btn:hover {
-            background: #E8F5E9;
-            border-color: var(--primary);
-        }
-
-        .option-btn.correct {
-            background: #C8E6C9 !important;
-            border-color: #2E7D32 !important;
-            color: #1B5E20;
-        }
-
-        .option-btn.wrong {
-            background: #FFCDD2 !important;
-            border-color: #C62828 !important;
-            color: #B71C1C;
-        }
-
-        .quiz-feedback {
-            font-weight: bold;
-            margin-top: 15px;
-            min-height: 24px;
-        }
-
-        /* Attractions & Info Styles */
-        .info-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            border-left: 5px solid var(--primary);
-        }
-
-        .info-card.accent-border {
-            border-left-color: var(--accent);
-        }
-
-        .info-title {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--primary-dark);
-            margin-bottom: 5px;
-        }
-
-        .attraction-tag {
-            display: inline-block;
-            background: #E0F2F1;
-            color: var(--primary-dark);
-            font-size: 0.8rem;
-            font-weight: bold;
-            padding: 2px 10px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
-
-        .phrase-box {
-            background: #FFF8E1;
-            border: 1px solid #FFE082;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        .hotel-box {
-            background: #E8F5E9;
-            border: 2px dashed #4CAF50;
-            padding: 15px;
-            border-radius: var(--radius);
-            margin-top: 10px;
-        }
-
-        .directions-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        @media(min-width: 600px) {
-            .directions-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .dir-item {
-            background: #F9F9F9;
-            border: 1px solid #EEE;
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        .dir-es {
-            font-weight: bold;
-            color: var(--accent);
-        }
-
-        /* Travel Times Badge Grid */
-        .transit-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 8px;
-            margin: 12px 0;
-            background: #F4F7F6;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .transit-item {
-            font-size: 0.85rem;
-            color: var(--text);
-        }
-
-        .transit-item span {
-            display: block;
-            font-weight: bold;
-            color: var(--primary-dark);
-            font-size: 0.95rem;
-        }
-
-        /* Calc & Converter */
-        .calc-box {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .calc-input {
-            padding: 8px 12px;
-            border: 2px solid #DDD;
-            border-radius: 8px;
-            font-size: 1rem;
-            width: 120px;
-        }
-
-        /* Cheat Sheet & Search */
-        .search-box {
-            width: 100%;
-            padding: 12px 18px;
-            border: 2px solid #DDD;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            margin-bottom: 15px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-box:focus {
-            border-color: var(--primary);
-        }
-
-        .cheat-sheet {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .cheat-item {
-            padding: 14px 0;
-            border-bottom: 1px solid #EEE;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .cheat-item:last-child {
-            border-bottom: none;
-        }
-
-        .cheat-term {
-            font-weight: bold;
-            color: var(--primary-dark);
-            font-size: 1.1rem;
-        }
-
-        .hint-text {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 5px;
-        }
-
-        /* Menu Decoder Specific Banner Styling */
-        .menu-banner {
-            background: #EFEBE9;
-            border-left: 5px solid var(--accent);
-            padding: 18px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .dish-title {
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-decoration: underline;
-            color: var(--primary-dark);
-            display: block;
-            margin-top: 4px;
-        }
-
-        .dish-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent);
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puerto Vallarta Group Vacation Guide</title>
+  <style>
+    :root {
+      --primary: #008080;
+      --secondary: #e07a5f;
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --text: #2b2d42;
+      --accent: #f2cc8f;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    header p {
+      margin: 0.25rem 0 0 0;
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    nav {
+      display: flex;
+      background-color: #ffffff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow-x: auto;
+    }
+
+    nav button {
+      flex: 1;
+      padding: 1rem 0.5rem;
+      border: none;
+      background: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    nav button.active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+    }
+
+    main {
+      flex: 1;
+      padding: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Target Box Highlights */
+    .target-card {
+      background: linear-gradient(135deg, #2a9d8f, #264653);
+      color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .target-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.85rem;
+    }
+
+    .target-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .target-hint {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #d0694e;
+    }
+
+    .btn-secondary {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      margin-left: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* List Styles */
+    .hunt-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .hunt-item {
+      display: flex;
+      align-items: center;
+      padding: 0.8rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .hunt-item:last-child {
+      border-bottom: none;
+    }
+
+    .hunt-item input[type="checkbox"] {
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+
+    .hunt-item-text {
+      flex: 1;
+    }
+
+    .hunt-item-title {
+      font-weight: 600;
+      display: block;
+    }
+
+    .hunt-item-hint {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .hunt-item.completed .hunt-item-title {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: #eee;
+      color: #555;
+      margin-left: 0.5rem;
+    }
+
+    .progress-bar-container {
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      height: 12px;
+      width: 100%;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .progress-bar {
+      background-color: var(--primary);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Decoder & Flashcards Styles */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .vocab-card {
+      border-left: 4px solid var(--primary);
+    }
+
+    .vocab-card h4 {
+      margin: 0 0 0.3rem 0;
+      color: var(--primary);
+    }
+
+    .vocab-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>🌴 Puerto Vallarta Slang & Local Guide</h1>
-        <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, and attractions.</p>
-    </header>
+  <header>
+    <h1>Puerto Vallarta Guide</h1>
+    <p>Plaza Pelicanos Grand Beach Resort & Group Companion</p>
+  </header>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('flashcards', event)">Flashcards</button>
-        <button class="tab-btn" onclick="switchTab('logistics', event)">🚖 Hotel & Currency</button>
-        <button class="tab-btn" onclick="switchTab('attractions', event)">📍 Attractions</button>
-        <button class="tab-btn" onclick="switchTab('quiz', event)">Slang Quiz</button>
-        <button class="tab-btn" onclick="switchTab('menuquiz', event)">Menu Decoder</button>
-        <button class="tab-btn" onclick="switchTab('weakareas', event)">🎯 Weak Areas (<span id="weak-count">0</span>)</button>
-        <button class="tab-btn" onclick="switchTab('favorites', event)">⭐ Favorites (<span id="fav-count">0</span>)</button>
-        <button class="tab-btn" onclick="switchTab('cheatsheet', event)">Quick Reference</button>
+  <nav>
+    <button class="nav-btn active" onclick="switchTab('hunt')">🎯 Scavenger Hunt</button>
+    <button class="nav-btn" onclick="switchTab('decoder')">🌮 Menu & Slang</button>
+    <button class="nav-btn" onclick="switchTab('logistics')">📍 Hotel & Map</button>
+  </nav>
+
+  <main>
+    <!-- TAB 1: SCAVENGER HUNT -->
+    <div id="tab-hunt" class="tab-content active">
+      
+      <!-- Target Card -->
+      <div class="target-card">
+        <h3>Your Current Target Objective</h3>
+        <div id="target-title" class="target-title">Loading target...</div>
+        <div id="target-hint" class="target-hint">Please wait...</div>
+        <button class="btn" onclick="markTargetFound()">Mark Complete</button>
+        <button class="btn btn-secondary" onclick="drawNewTarget()">Draw New Target</button>
+      </div>
+
+      <!-- Overall Hunt Progress -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0;">Malecón Checklist</h3>
+          <span id="progress-text" style="font-weight: bold; color: var(--primary);">0 / 35 Found</span>
+        </div>
+        <div class="progress-bar-container">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <ul id="hunt-list" class="hunt-list"></ul>
+      </div>
+
     </div>
 
-    <!-- FLASHCARD VIEW -->
-    <div id="flashcards" class="view active">
-        <div class="card-container">
-            <div class="flashcard" id="card" onclick="flipCard()">
-                <div class="card-front">
-                    <span class="category-tag" id="card-cat">Category</span>
-                    <button class="star-btn" id="card-star" onclick="toggleStarCurrent(event)">★</button>
-                    <div class="term" id="card-term">Term</div>
-                    <div class="phonetic" id="card-phone">Pronunciation</div>
-                    <button class="audio-btn" onclick="speakTerm(event)">🔊 Listen</button>
-                    <div class="hint-text">(Click card to reveal meaning)</div>
-                </div>
-                <div class="card-back">
-                    <div class="meaning" id="card-meaning">Meaning</div>
-                    <div class="context" id="card-context">Context & Local Usage</div>
-                </div>
-            </div>
+    <!-- TAB 2: MENU & SLANG DECODER -->
+    <div id="tab-decoder" class="tab-content">
+      <div class="card">
+        <h3>Local Slang & Phrases</h3>
+        <div class="grid">
+          <div class="card vocab-card">
+            <h4>¿Qué onda?</h4>
+            <p>What's up? / How's it going?</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>¡Chido!</h4>
+            <p>Cool! / Awesome!</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Por favor</h4>
+            <p>Please</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>La cuenta, por favor</h4>
+            <p>The check, please</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>¿Dónde está...?</h4>
+            <p>Where is...?</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Con permiso</h4>
+            <p>Excuse me (passing through)</p>
+          </div>
         </div>
-        <div class="controls">
-            <button class="ctrl-btn" id="prev-btn" onclick="prevCard()">Previous</button>
-            <span id="card-counter">1 / 10</span>
-            <button class="ctrl-btn" id="next-btn" onclick="nextCard()">Next</button>
+      </div>
+
+      <div class="card">
+        <h3>Menu Decoder</h3>
+        <div class="grid">
+          <div class="card vocab-card">
+            <h4>Pescado Zarandeado</h4>
+            <p>Butterflied, marinated grilled fish (PV specialty)</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Raicilla</h4>
+            <p>Local artisanal agave spirit, smokier/fruitier than tequila</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Tuba</h4>
+            <p>Chilled coconut palm drink topped with fruit and nuts</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Aguachile</h4>
+            <p>Fresh raw shrimp cured in lime, cucumber, and chilies</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Birria</h4>
+            <p>Slow-cooked braised meat served with rich consommé</p>
+          </div>
+          <div class="card vocab-card">
+            <h4>Esquites</h4>
+            <p>Warm street corn served in a cup with mayo, cotija & chile</p>
+          </div>
         </div>
+      </div>
     </div>
 
-    <!-- LOGISTICS, HOTEL & CURRENCY VIEW -->
-    <div id="logistics" class="view">
-        <div class="info-card accent-border">
-            <div class="info-title">🏨 Accommodation Card</div>
-            <p>Show this screen to any taxi or rideshare driver when returning to the resort:</p>
-            <div class="hotel-box">
-                <div style="font-size: 1.3rem; font-weight: bold; color: var(--primary-dark);">Plaza Pelicanos Grand Beach Resort</div>
-                <div style="font-size: 1.05rem; margin-top: 4px;"><strong>Dirección:</strong> José Clemente Orozco 131, Zona Hotelera Las Glorias</div>
-                <div style="font-size: 0.95rem; color: #555; margin-top: 4px;"><strong>Referencia:</strong> Por la Av. Francisco Medina Ascencio, Zona Hotelera Las Glorias</div>
-            </div>
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Plaza+Pelicanos+Grand+Beach+Resort" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Hotel Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
-            </div>
-        </div>
-
-        <div class="info-card">
-            <div class="info-title">💵 Tipping & Peso Calculator</div>
-            <p style="margin-bottom: 10px;">Quick reference for local tipping standards in Puerto Vallarta:</p>
-            <ul style="margin-left: 20px; font-size: 0.95rem; margin-bottom: 15px;">
-                <li><strong>Restaurants:</strong> 10%–15% (Check bill for <em>"Propina Incluida"</em> first).</li>
-                <li><strong>Taxis:</strong> Tipping is not expected, but round up $10–$20 pesos for good service.</li>
-                <li><strong>Panga Drivers / Tour Guides:</strong> $50–$100 pesos per couple.</li>
-                <li><strong>Baggage / Bellhops:</strong> $20–$50 pesos per bag.</li>
-            </ul>
-
-            <div style="background: #F0F4F8; padding: 12px; border-radius: 8px;">
-                <strong>Quick Peso $\rightarrow$ USD Converter</strong> (Estimated at 20 MXN = $1 USD):
-                <div class="calc-box">
-                    <input type="number" id="peso-input" class="calc-input" placeholder="Pesos ($)" oninput="convertPesos()">
-                    <span>MXN = </span>
-                    <strong id="usd-output" style="font-size: 1.2rem; color: var(--accent);">$0.00 USD</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="info-card">
-            <div class="info-title">🚨 Emergency & Key Numbers</div>
-            <div class="directions-grid">
-                <div class="dir-item">
-                    <div class="dir-es">911</div>
-                    <div class="hint-text">National Emergency Services (Police, Ambulance, Fire)</div>
-                </div>
-                <div class="dir-item">
-                    <div class="dir-es">U.S. Consular Agency PV</div>
-                    <div class="hint-text">+52 (333) 268-2100 (Paradise Plaza, Nuevo Vallarta)</div>
-                </div>
-            </div>
-        </div>
+    <!-- TAB 3: LOGISTICS -->
+    <div id="tab-logistics" class="tab-content">
+      <div class="card">
+        <h3>Resort Information</h3>
+        <p><strong>Hotel:</strong> Plaza Pelicanos Grand Beach Resort</p>
+        <p><strong>Address:</strong> C. Diego Rivera 120, Zona Hotelera, Las Glorias, 48333 Puerto Vallarta, Jal.</p>
+        <p><strong>Malecón Transit:</strong> ~10 mins drive / ~35 mins walk along the beach front</p>
+      </div>
+      <div class="card">
+        <h3>Quick Links</h3>
+        <p><a href="https://maps.google.com" target="_blank" style="color: var(--primary); font-weight: bold;">Open Google Maps Directions</a></p>
+      </div>
     </div>
+  </main>
 
-    <!-- ATTRACTIONS & DIRECTIONS VIEW -->
-    <div id="attractions" class="view">
-        <div class="info-card accent-border">
-            <div class="info-title">🧭 "¿Cómo llegamos a...?" Direction Helper</div>
-            <p>How to ask for and understand directions from locals when exploring PV:</p>
-            <div class="directions-grid">
-                <div class="dir-item">
-                    <div class="dir-es">¿Cómo llegamos a...?</div>
-                    <div class="hint-text">"How do we get to...?"</div>
-                </div>
-                <div class="dir-item">
-                    <div class="dir-es">Todo derecho / Todo recto</div>
-                    <div class="hint-text">"Straight ahead"</div>
-                </div>
-                <div class="dir-item">
-                    <div class="dir-es">A la derecha / A la izquierda</div>
-                    <div class="hint-text">"To the right / To the left"</div>
-                </div>
-                <div class="dir-item">
-                    <div class="dir-es">A unas cuadras</div>
-                    <div class="hint-text">"A few blocks away"</div>
-                </div>
-                <div class="dir-item">
-                    <div class="dir-es">A la vuelta</div>
-                    <div class="hint-text">"Just around the corner"</div>
-                </div>
-                <div class="dir-item">
-                    <div class="dir-es">Cruzando la calle</div>
-                    <div class="hint-text">"Across the street"</div>
-                </div>
-            </div>
-        </div>
+  <script>
+    // Master Array of Scavenger Items
+    const HUNT_ITEMS = [
+      { id: 1, name: "El Niño sobre el Caballo de Mar", hint: "The iconic boy on a seahorse statue on the boardwalk.", type: "Sculpture" },
+      { id: 2, name: "En Busca de la Razón", hint: "Giant bronze ladder with three figures climbing high.", type: "Sculpture" },
+      { id: 3, name: "La Rotonda del Mar", hint: "Surrealist bronze chairs featuring sea creature heads.", type: "Sculpture" },
+      { id: 4, name: "Nostalgia", hint: "Bronze couple sitting side-by-side on a bench looking out to sea.", type: "Sculpture" },
+      { id: 5, name: "El Sutil Comepiedras", hint: "Quirky sculpture featuring obsidian stones embedded in bronze.", type: "Sculpture" },
+      { id: 6, name: "El Unicornio de la Buena Fortuna", hint: "Stylized bronze unicorn near the water.", type: "Sculpture" },
+      { id: 7, name: "Tritón y Sirena", hint: "Triton reaching out toward a mermaid.", type: "Sculpture" },
+      { id: 8, name: "San Pascual Bailón", hint: "Patron saint of cooks holding a loaf of bread and skillet.", type: "Sculpture" },
+      { id: 9, name: "El Milenio", hint: "Massive spiral sculpture depicting humanity's history.", type: "Sculpture" },
+      { id: 10, name: "Lluvia", hint: "Bronze man standing with arms open facing the sky.", type: "Sculpture" },
+      { id: 11, name: "Los Arcos del Malecón", hint: "The stone arches decorative open-air amphitheater.", type: "Landmark" },
+      { id: 12, name: "Origen y Destino", hint: "Bronze ensemble featuring a boat, whale, and bird.", type: "Sculpture" },
+      { id: 13, name: "La Naturaleza como Madre", hint: "Abstract wave sculpture with facial contours.", type: "Sculpture" },
+      { id: 14, name: "El Faro del Malecón", hint: "The historic concrete lighthouse tower along the strip.", type: "Landmark" },
+      { id: 15, name: "Día de los Muertos Cat Skull T-shirt", hint: "Find a shirt featuring a cat sugar skull in a shop.", type: "Item" },
+      { id: 16, name: "Wixárika (Huichol) Beaded Craft", hint: "Intricate colorful beadwork art item (like a jaguar head).", type: "Item" },
+      { id: 17, name: "Hand-carved Lucha Libre Mask", hint: "Look for traditional wooden or leather wrestling masks.", type: "Item" },
+      { id: 18, name: "Fresh Coconut with a Straw", hint: "Spot a street vendor preparing fresh cold coconuts.", type: "Food" },
+      { id: 19, name: "Elote or Esquite Cart", hint: "Find a street vendor serving Mexican street corn.", type: "Food" },
+      { id: 20, name: "Hand-painted House Number Tile", hint: "Custom ceramic house tile stand.", type: "Item" },
+      { id: 21, name: "Bottle of Raicilla", hint: "Look in a local shop selling Jalisco's artisanal agave spirit.", type: "Item" },
+      { id: 22, name: "Fresh Hot Churros Cart", hint: "Spot a paper bag of freshly made churros.", type: "Food" },
+      { id: 23, name: "Voladores de Papantla", hint: "Performers spinning upside down from a pole near the arches.", type: "Landmark" },
+      { id: 24, name: "Beach Sand Sculpture", hint: "Detailed temporary sand art built right on the shore.", type: "Landmark" },
+      { id: 25, name: "Hand-blown Glass Butterfly (Mariposa)", hint: "Local Mexican glasswork in a shop display.", type: "Item" },
+      { id: 26, name: "Sombrero de Palma", hint: "Traditional woven Mexican palm hat.", type: "Item" },
+      { id: 27, name: "Huarache Leather Sandal Display", hint: "A stand displaying traditional woven leather sandals.", type: "Item" },
+      { id: 28, name: "Tubero Street Vendor", hint: "Vendor selling coconut palm drink topped with pecans.", type: "Food" },
+      { id: 29, name: "Historic Street Name Sign", hint: "Read a street sign named after a historical figure out loud.", type: "Challenge" },
+      { id: 30, name: "Living Statue / Street Performer", hint: "Ask permission in Spanish for a quick picture!", type: "Challenge" },
+      { id: 31, name: "Menu Item: 'Pescado Zarandeado'", hint: "Find a restaurant menu board displaying this PV specialty.", type: "Challenge" },
+      { id: 32, name: "Paletas Flavor List", hint: "Find a popsicle cart and take a look at the local flavors.", type: "Challenge" },
+      { id: 33, name: "Yellow & White PV Taxi", hint: "Spot a taxi with the classic Puerto Vallarta color scheme.", type: "Landmark" },
+      { id: 34, name: "'No Problem In Puerto Vallarta' Sign", hint: "Find a souvenir plate or sign displaying this motto.", type: "Item" },
+      { id: 35, name: "Giant 'PUERTO VALLARTA' Letter Sign", hint: "The large colorful city letters on the boardwalk.", type: "Landmark" }
+    ];
 
-        <!-- MALECÓN -->
-        <div class="info-card">
-            <div class="info-title">El Malecón & Downtown Boardwalk</div>
-            <span class="attraction-tag">In-Town Iconic Spot</span>
-            <p>The famous oceanfront boardwalk featuring bronze sculptures, street performers, and sunset views.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>~40–45 min</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>8–12 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>12–15 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
-            </div>
+    // Navigation Tab Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      event.target.classList.add('active');
+    }
 
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Malecon+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Boardwalk Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos al Malecón, por favor?" or "Al Malecón, por favor."
-            </div>
-        </div>
+    // Storage Functions
+    function getFoundList() {
+      return JSON.parse(localStorage.getItem('pv_found_items') || '[]');
+    }
 
-        <!-- ZONA ROMÁNTICA & LOS MUERTOS PIER -->
-        <div class="info-card">
-            <div class="info-title">Zona Romántica & Los Muertos Pier</div>
-            <span class="attraction-tag">Dining & Water Taxi Hub</span>
-            <p>Historic cobblestone neighborhood full of local dining, beach clubs, and the sail-shaped Los Muertos pier where water taxis depart.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>~55–65 min</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>12–18 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>20–25 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>Departure Pier</span></div>
-            </div>
+    function toggleFound(id) {
+      let found = getFoundList();
+      if (found.includes(id)) {
+        found = found.filter(item => item !== id);
+      } else {
+        found.push(id);
+      }
+      localStorage.setItem('pv_found_items', JSON.stringify(found));
+      renderHuntUI();
+    }
 
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Los+Muertos+Pier+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Los Muertos Pier Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "A la Zona Romántica / Al Muelle de Los Muertos, por favor."
-            </div>
-        </div>
+    function drawNewTarget() {
+      const randomItem = HUNT_ITEMS[Math.floor(Math.random() * HUNT_ITEMS.length)];
+      localStorage.setItem('pv_my_target', randomItem.id);
+      renderHuntUI();
+    }
 
-        <!-- CHURCH -->
-        <div class="info-card">
-            <div class="info-title">Parroquia de Nuestra Señora de Guadalupe</div>
-            <span class="attraction-tag">Historical Landmark</span>
-            <p>The iconic parish church crowned with ornate wrought-iron artwork, located just one block inland from the Malecón.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>~45 min</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>10–12 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>15 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
-            </div>
-
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Parroquia+de+Nuestra+Senora+de+Guadalupe+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Church Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos a la iglesia de la corona?"
-            </div>
-        </div>
-
-        <!-- MARINA VALLARTA -->
-        <div class="info-card">
-            <div class="info-title">Marina Vallarta Boardwalk & Lighthouse</div>
-            <span class="attraction-tag">Yachts & Dining</span>
-            <p>Upscale marina lined with luxury yachts, oceanfront restaurants, and the iconic lighthouse bar. Great evening stroll destination.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>~45–50 min</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>8–10 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>12–15 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
-            </div>
-
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Marina+Vallarta+Lighthouse" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Marina Vallarta Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "A la Marina Vallarta, por favor."
-            </div>
-        </div>
-
-        <!-- BOTANICAL GARDENS -->
-        <div class="info-card">
-            <div class="info-title">Jardín Botánico de Vallarta</div>
-            <span class="attraction-tag">Day Trip / Nature</span>
-            <p>World-class botanical garden in the Sierra Madre foothills featuring orchids, hiking trails, and river swimming.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>Too Far</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>35–45 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>55–65 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
-            </div>
-
-            <div style="margin-top: 10px; margin-bottom: 5px; display: flex; flex-direction: column; gap: 4px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Vallarta+Botanical+Garden" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Garden Pin in Google Maps ↗
-                </a>
-                <a href="https://www.google.com/maps/search/?api=1&query=Carranza+and+Aguacate+Puerto+Vallarta" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold; font-size: 0.88rem;">
-                    🏣 Open "El Tuito" Bus Stop Location ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                📍 <strong>Bus Details:</strong> Catch blue "El Tuito" bus at Carranza & Aguacate in Zona Romántica.
-                <br>🗣️ <strong>Phrase:</strong> "¿Dónde podemos tomar el autobús para el Jardín Botánico?"
-            </div>
-        </div>
-
-        <!-- LOS ARCOS MARINE PARK -->
-        <div class="info-card">
-            <div class="info-title">Los Arcos Marine Park (Mismaloya)</div>
-            <span class="attraction-tag">Snorkeling & Kayaking</span>
-            <p>Protected granite rock islands in Mismaloya bay teeming with tropical fish, sea caves, and snorkeling reefs.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>Too Far</span></div>
-                <div class="transit-item">🚕 Taxi / Uber: <span>25–35 min</span></div>
-                <div class="transit-item">🚌 Public Bus: <span>45–55 min</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>10 min (from Mismaloya)</span></div>
-            </div>
-
-            <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Los+Arcos+National+Marine+Park+Mismaloya" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Los Arcos Marine Park Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "¿Cuánto cuesta una panga para hacer snorkel en Los Arcos?"
-            </div>
-        </div>
-
-        <!-- YELAPA & BOCA DE TOMATLÁN -->
-        <div class="info-card">
-            <div class="info-title">Yelapa Beach & Boca de Tomatlán</div>
-            <span class="attraction-tag">Boat Adventure & Waterfalls</span>
-            <p>Car-free coastal fishing village with a jungle waterfall accessible only by water taxi (panga) departing from Boca de Tomatlán or Los Muertos Pier.</p>
-            
-            <div class="transit-grid">
-                <div class="transit-item">🚶 Walking: <span>N/A</span></div>
-                <div class="transit-item">🚕 Taxi to Dock: <span>30 min (to Boca)</span></div>
-                <div class="transit-item">🚌 Bus to Dock: <span>50 min (to Boca)</span></div>
-                <div class="transit-item">🛥️ Water Taxi: <span>45–60 min</span></div>
-            </div>
-
-            <div style="margin-top: 10px; margin-bottom: 5px; display: flex; flex-direction: column; gap: 4px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Boca+de+Tomatlan+Pier" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Boca de Tomatlán Dock Pin in Google Maps ↗
-                </a>
-                <a href="https://www.google.com/maps/search/?api=1&query=Yelapa+Jalisco" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold; font-size: 0.88rem;">
-                    🏖️ Open Yelapa Beach & Town Pin in Google Maps ↗
-                </a>
-            </div>
-            <div class="phrase-box">
-                📍 <strong>Boat Departure:</strong> Main Pier at Boca de Tomatlán or Los Muertos Pier.
-                <br>🗣️ <strong>Phrase:</strong> "¿A qué hora sale la panga para Yelapa?"
-            </div>
-        </div>
-    </div>
-
-    <!-- SLANG QUIZ VIEW -->
-    <div id="quiz" class="view">
-        <div class="quiz-card">
-            <div class="quiz-question" id="quiz-q">Question text goes here...</div>
-            <div class="options-grid" id="quiz-options"></div>
-            <div class="quiz-feedback" id="quiz-feedback"></div>
-            <button class="ctrl-btn" id="quiz-next-btn" style="display:none; margin-top:15px;" onclick="nextQuestion()">Next Question</button>
-        </div>
-    </div>
-
-    <!-- MENU DECODER QUIZ VIEW -->
-    <div id="menuquiz" class="view">
-        <div class="quiz-card">
-            <div class="menu-banner">
-                <div class="dish-label">Menu Item</div>
-                <span class="dish-title" id="menu-dish-name">Simulated Dish Name...</span>
-            </div>
-            <div class="quiz-question" id="menu-q">What is in this dish?</div>
-            <div class="options-grid" id="menu-options"></div>
-            <div class="quiz-feedback" id="menu-feedback"></div>
-            <button class="ctrl-btn" id="menu-next-btn" style="display:none; margin-top:15px;" onclick="nextMenuQuestion()">Next Menu Item</button>
-        </div>
-    </div>
-
-    <!-- WEAK AREAS REVIEW VIEW -->
-    <div id="weakareas" class="view">
-        <div class="cheat-sheet">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                <h2 style="color: var(--primary);">🎯 Weak Areas & Missed Quiz Items</h2>
-                <div>
-                    <button class="ctrl-btn secondary" onclick="startWeakQuiz()" id="start-weak-quiz-btn">⚡ Practice Missed Items Quiz</button>
-                    <button class="ctrl-btn" style="background: #888;" onclick="clearWeakAreas()">Clear All</button>
-                </div>
-            </div>
-            <p style="margin-bottom: 15px; color: #555;">Terms or menu items you missed in previous quiz sessions will show up here automatically.</p>
-            
-            <div id="weak-quiz-container" style="display:none; margin-bottom: 20px;" class="quiz-card">
-                <div class="quiz-question" id="weak-q">Review question...</div>
-                <div class="options-grid" id="weak-options"></div>
-                <div class="quiz-feedback" id="weak-feedback"></div>
-                <button class="ctrl-btn" id="weak-next-btn" style="display:none; margin-top:15px;" onclick="nextWeakQuestion()">Next Item</button>
-            </div>
-
-            <div id="weak-list">No weak areas yet! Take a Slang or Menu quiz to automatically track any missed answers here.</div>
-        </div>
-    </div>
-
-    <!-- FAVORITES VIEW -->
-    <div id="favorites" class="view">
-        <div class="cheat-sheet">
-            <h2 style="margin-bottom: 15px; color: var(--primary);">Your Starred Phrases</h2>
-            <div id="fav-list">No favorites starred yet! Click the star icon on any flashcard or cheat sheet item to add it here.</div>
-        </div>
-    </div>
-
-    <!-- CHEAT SHEET & SEARCH VIEW -->
-    <div id="cheatsheet" class="view">
-        <input type="text" id="search-input" class="search-box" placeholder="🔎 Search terms, English meanings, or categories..." oninput="renderCheatSheet()">
-        <div class="cheat-sheet" id="cheat-list"></div>
-    </div>
-
-    <script>
-        const vocabulary = [
-            // Attractions & Directions
-            { id: 25, term: "¿Cómo llegamos a...?", phonetic: "KOH-moh yay-GAH-mohs ah", meaning: "How do we get to...?", context: "The go-to phrase when asking locals or taxi drivers for directions to any landmark.", category: "Attractions & Directions" },
-            { id: 26, term: "Todo derecho", phonetic: "TOH-doh dey-RAY-choh", meaning: "Straight ahead", context: "Common response when someone tells you to keep walking straight down a street.", category: "Attractions & Directions" },
-            { id: 27, term: "A la derecha / izquierda", phonetic: "ah lah dey-RAY-chah / ees-KYEHR-dah", meaning: "To the right / To the left", context: "Key directional terms to listen for when asking where something is located.", category: "Attractions & Directions" },
-            { id: 28, term: "A la vuelta / A unas cuadras", phonetic: "ah lah VWEHL-tah / ah OO-nahs KWAH-drahs", meaning: "Around the corner / A few blocks away", context: "Used by locals when giving walking distances around Old Town Vallarta.", category: "Attractions & Directions" },
-            { id: 29, term: "¿A qué hora sale la panga?", phonetic: "ah KAY OH-rah SAH-lay lah PAHN-gah", meaning: "What time does the water taxi leave?", context: "Essential phrase when taking small boats from Boca de Tomatlán to Yelapa or beach coves.", category: "Attractions & Directions" },
-
-            // Slang & Greetings
-            { id: 1, term: "¿Qué onda, vale?", phonetic: "KAY own-dah, VAH-lay", meaning: "What's up, man/bro?", context: "'Vale' is the local Jalisco equivalent to 'guy' or 'bro'. Standard friendly greeting.", category: "Greetings & Slang" },
-            { id: 2, term: "¡Ánimo!", phonetic: "AH-nee-moh", meaning: "Let's go! / Cheer up! / Have a good one!", context: "Used everywhere in PV as a cheerful greeting, farewell, or way to say 'you're welcome'.", category: "Greetings & Slang" },
-            { id: 3, term: "Chido / Chingón", phonetic: "CHEE-doh / cheen-GOHN", meaning: "Cool / Awesome (Badass)", context: "Use 'chido' for everyday nice things and 'chingón' when something genuinely impresses you.", category: "Greetings & Slang" },
-            { id: 4, term: "¿Neta?", phonetic: "NEH-tah", meaning: "For real? / Seriously?", context: "Great conversational anchor when someone shares surprising local news or tips.", category: "Greetings & Slang" },
-            
-            // Logistics & Survival
-            { id: 5, term: "¿Cuánto va a ser?", phonetic: "KWAHN-toh vah ah sehr", meaning: "How much is it going to be?", context: "Essential phrase when taking city taxis before getting inside.", category: "Logistics & Taxi" },
-            { id: 6, term: "Feria", phonetic: "FAY-ree-ah", meaning: "Pocket change / Cash", context: "Ask '¿Tiene feria?' to see if a vendor or taxi driver has change for larger bills.", category: "Logistics & Taxi" },
-            { id: 7, term: "La cuenta, por favor", phonetic: "lah KWEHN-tah pohr fah-VOHR", meaning: "The bill, please", context: "Servers in Mexico will not bring the bill until you ask for it.", category: "Logistics & Taxi" },
-            { id: 8, term: "¿Aceptan tarjeta?", phonetic: "ah-SEHP-tahn tahr-HAY-tah", meaning: "Do you accept card?", context: "Good to ask at smaller beach restaurants and local boutiques before ordering.", category: "Logistics & Taxi" },
-            { id: 9, term: "¡Aguas!", phonetic: "AH-gwahs", meaning: "Watch out! / Heads up!", context: "Shouted on busy cobblestone streets or crowded docks to warn you of steps or vehicles.", category: "Logistics & Taxi" },
-            { id: 10, term: "Ahorita", phonetic: "ah-oh-REE-tah", meaning: "Right now (loose concept)", context: "Can mean 5 seconds, 1 hour, or never. Relax and embrace the coastal pacing!", category: "Logistics & Taxi" },
-            { id: 11, term: "¿Dónde está el baño?", phonetic: "DOHN-day ehs-TAH el BAHN-yoh", meaning: "Where is the restroom?", context: "Essential location phrase for restaurants and beach clubs.", category: "Logistics & Taxi" },
-
-            // Spirits & Drinks
-            { id: 12, term: "Raicilla", phonetic: "rye-see-YAH", meaning: "Local Jalisco agave spirit", context: "Distilled from wild agaves. Herbal, floral, and complex. Sip slowly from a clay copita.", category: "Drinks & Spirits" },
-            { id: 13, term: "Copita", phonetic: "koh-PEE-tah", meaning: "Traditional shallow clay vessel", context: "The wide-mouthed clay dish used to drink neat Raicilla or Mezcal.", category: "Drinks & Spirits" },
-            { id: 14, term: "Sal de Gusano", phonetic: "sahl day goo-SAH-noh", meaning: "Agave-worm salt", context: "Served on citrus slices alongside neat Raicilla to complement the palate.", category: "Drinks & Spirits" },
-            { id: 15, term: "Tejuino", phonetic: "tay-HWEE-noh", meaning: "Fermented cold corn drink", context: "Refreshing street drink made from fermented masa, piloncillo, lime juice, and lime sorbet.", category: "Drinks & Spirits" },
-            { id: 16, term: "Tuba", phonetic: "TOO-bah", meaning: "Fermented coconut palm sap drink", context: "Boardwalk drink garnished with diced apples, cucumbers, and roasted peanuts.", category: "Drinks & Spirits" },
-            { id: 17, term: "Una Chela / Cheve", phonetic: "OO-nah CHAY-lah / CHAY-vay", meaning: "A cold beer", context: "Casual slang for beer. Ask for 'una cheve bien fría'.", category: "Drinks & Spirits" },
-            { id: 18, term: "Estar crudo", phonetic: "ehs-TAHR CROO-doh", meaning: "To be hungover", context: "Literally 'to be raw'. Say 'Ando bien crudo' when ordering morning chilaquiles.", category: "Drinks & Spirits" },
-
-            // Food & Seafood
-            { id: 19, term: "Pescado Zarandeado", phonetic: "pehs-KAH-doh sah-rahn-day-AH-doh", meaning: "Adobo wood-grilled whole fish", context: "Signature seafood dish of Jalisco/Nayarit. Butterflied snapper grilled over charcoal.", category: "Food & Dining" },
-            { id: 20, term: "Aguachile", phonetic: "ah-gwah-CHEE-lay", meaning: "Raw lime & chile-cured shrimp", context: "Raw shrimp cured instantly in lime juice, crushed serrano peppers, cucumber, and onion.", category: "Food & Dining" },
-            { id: 21, term: "Ceviche Vallarta", phonetic: "seh-VEE-chay vah-YAR-tah", meaning: "Finely ground citrus-cured fish", context: "Vallarta style ceviche features finely chopped fish mixed with shredded carrots and cilantro.", category: "Food & Dining" },
-            { id: 22, term: "Pescado Embarazado", phonetic: "pehs-KAH-doh em-bah-rah-SAH-doh", meaning: "Grilled fish on a stick", context: "Play on 'en-vara-asado' (roasted on a stick). Popular grilled beach snack.", category: "Food & Dining" },
-            { id: 23, term: "Birria", phonetic: "BEER-ree-ah", meaning: "Slow-braised spiced meat stew", context: "Jalisco's famous braised goat or beef, served in tacos with a side of savory consomé for dipping.", category: "Food & Dining" },
-            { id: 24, term: "Sin picante / Con todo", phonetic: "seen pee-KAHN-tay / kohn TOH-doh", meaning: "Not spicy / With all toppings", context: "Use at taco stands to specify spice level or request all onions, cilantro, and salsa.", category: "Food & Dining" }
-        ];
-
-        const menuDishes = [
-            {
-                id: 101,
-                dish: "Pescado Zarandeado al Carbon",
-                question: "If you order this on the beach, what are you getting?",
-                correct: "Butterflied whole fish slathered in adobo marinade and wood-grilled over charcoal",
-                options: [
-                    "Butterflied whole fish slathered in adobo marinade and wood-grilled over charcoal",
-                    "Raw fish cooked in dark soy sauce and serrano chile broth",
-                    "Deep-fried fish tacos topped with cabbage and mayo",
-                    "Finely ground fish ceviche served on crispy tostadas"
-                ],
-                explanation: "Zarandeado is the classic coastal Jalisco/Nayarit adobo-braised charcoal grilled fish!"
-            },
-            {
-                id: 102,
-                dish: "Aguachile Negro de Camaron",
-                question: "What makes an 'Aguachile' distinct from standard ceviche?",
-                correct: "Fresh raw shrimp cured instantly in lime juice and crushed chiles, served very spicy",
-                options: [
-                    "Fresh raw shrimp cured instantly in lime juice and crushed chiles, served very spicy",
-                    "Slow-boiled shrimp served in a warm tomato and octopus broth",
-                    "Pan-seared shrimp stuffed with cheese and wrapped in bacon",
-                    "Smoked marlin shredded and cooked with melted cheese"
-                ],
-                explanation: "Aguachile uses raw shrimp marinated rapidly in lime juice and fresh ground serranos or charred chiles."
-            },
-            {
-                id: 103,
-                dish: "Tacos de Birria de Res con Consomé",
-                question: "How should you properly eat this Jalisco staple?",
-                correct: "Dip the spiced braised beef tacos directly into the side bowl of savory broth (consomé)",
-                options: [
-                    "Dip the spiced braised beef tacos directly into the side bowl of savory broth (consomé)",
-                    "Eat the beef dry and mix the consomé with tequila",
-                    "Pour citrus juice over the meat and let it cure for 20 minutes",
-                    "Wrap the tacos in a flour tortilla with rice and beans"
-                ],
-                explanation: "Birria is rich and spiced! You always dip your taco into the warm consomé broth before taking a bite."
-            },
-            {
-                id: 104,
-                dish: "Copita de Raicilla de Sierra con Sal de Gusano",
-                question: "What is the proper way to enjoy this order?",
-                correct: "Sip the room-temperature agave spirit slowly, alternating with citrus sprinkled with agave-worm salt",
-                options: [
-                    "Sip the room-temperature agave spirit slowly, alternating with citrus sprinkled with agave-worm salt",
-                    "Shoot it quickly as a shot with a wedge of lime and table salt",
-                    "Mix it with grapefruit soda and drink it through a straw over crushed ice",
-                    "Pour it over a bowl of shaved ice as a dessert drink"
-                ],
-                explanation: "Raicilla is a complex craft spirit meant to be sipped in 'besitos' (small kisses) from a clay copita!"
-            }
-        ];
-
-        let currentIndex = 0;
-        let currentQuizIndex = 0;
-        let currentMenuIndex = 0;
-        let currentWeakQuizIndex = 0;
-        let weakQuizItems = [];
-
-        let starredIds = JSON.parse(localStorage.getItem('pv_starred_ids') || '[]');
-        let weakIds = JSON.parse(localStorage.getItem('pv_weak_ids') || '[]');
-
-        // Tabs
-        function switchTab(tabId, evt) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            
-            if (evt) evt.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-
-            if (tabId === 'quiz') startQuiz();
-            if (tabId === 'menuquiz') startMenuQuiz();
-            if (tabId === 'weakareas') renderWeakAreas();
-            if (tabId === 'favorites') renderFavorites();
-            if (tabId === 'cheatsheet') renderCheatSheet();
+    function markTargetFound() {
+      const assignedId = parseInt(localStorage.getItem('pv_my_target'));
+      if (assignedId) {
+        let found = getFoundList();
+        if (!found.includes(assignedId)) {
+          found.push(assignedId);
+          localStorage.setItem('pv_found_items', JSON.stringify(found));
         }
+        drawNewTarget();
+      }
+    }
 
-        // Currency Converter
-        function convertPesos() {
-            const pesos = parseFloat(document.getElementById('peso-input').value) || 0;
-            const usd = (pesos / 20).toFixed(2);
-            document.getElementById('usd-output').innerText = `$${usd} USD`;
-        }
+    // Render Scavenger Hunt UI
+    function renderHuntUI() {
+      // 1. Get or Assign Device Target
+      let assignedId = localStorage.getItem('pv_my_target');
+      if (!assignedId) {
+        const randomItem = HUNT_ITEMS[Math.floor(Math.random() * HUNT_ITEMS.length)];
+        assignedId = randomItem.id;
+        localStorage.setItem('pv_my_target', assignedId);
+      }
 
-        // Star / Favorites Logic
-        function toggleStarCurrent(e) {
-            e.stopPropagation();
-            const id = vocabulary[currentIndex].id;
-            toggleStarId(id);
-            updateCardStarState();
-        }
+      const currentTarget = HUNT_ITEMS.find(item => item.id == assignedId);
+      if (currentTarget) {
+        document.getElementById('target-title').innerText = currentTarget.name;
+        document.getElementById('target-hint').innerText = `${currentTarget.hint} (${currentTarget.type})`;
+      }
 
-        function toggleStarId(id) {
-            if (starredIds.includes(id)) {
-                starredIds = starredIds.filter(i => i !== id);
-            } else {
-                starredIds.push(id);
-            }
-            localStorage.setItem('pv_starred_ids', JSON.stringify(starredIds));
-            updateCounts();
-        }
+      // 2. Render List and Progress
+      const foundList = getFoundList();
+      const listContainer = document.getElementById('hunt-list');
+      listContainer.innerHTML = '';
 
-        // Weak Areas Logic
-        function addWeakArea(id) {
-            if (!weakIds.includes(id)) {
-                weakIds.push(id);
-                localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
-                updateCounts();
-            }
-        }
+      HUNT_ITEMS.forEach(item => {
+        const isChecked = foundList.includes(item.id);
+        const li = document.createElement('li');
+        li.className = `hunt-item ${isChecked ? 'completed' : ''}`;
+        
+        li.innerHTML = `
+          <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleFound(${item.id})">
+          <div class="hunt-item-text">
+            <span class="hunt-item-title">${item.name} <span class="tag">${item.type}</span></span>
+            <span class="hunt-item-hint">${item.hint}</span>
+          </div>
+        `;
+        listContainer.appendChild(li);
+      });
 
-        function removeWeakArea(id) {
-            weakIds = weakIds.filter(i => i !== id);
-            localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
-            updateCounts();
-            renderWeakAreas();
-        }
+      // Update Progress Bar
+      const total = HUNT_ITEMS.length;
+      const count = foundList.length;
+      const percentage = Math.round((count / total) * 100);
+      
+      document.getElementById('progress-text').innerText = `${count} / ${total} Found`;
+      document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
 
-        function clearWeakAreas() {
-            weakIds = [];
-            localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
-            updateCounts();
-            renderWeakAreas();
-        }
-
-        function updateCounts() {
-            document.getElementById('fav-count').innerText = starredIds.length;
-            document.getElementById('weak-count').innerText = weakIds.length;
-        }
-
-        function updateCardStarState() {
-            const id = vocabulary[currentIndex].id;
-            const starBtn = document.getElementById('card-star');
-            if (starredIds.includes(id)) {
-                starBtn.classList.add('starred');
-            } else {
-                starBtn.classList.remove('starred');
-            }
-        }
-
-        // Flashcards
-        function updateCard() {
-            const card = document.getElementById('card');
-            card.classList.remove('flipped');
-            setTimeout(() => {
-                const item = vocabulary[currentIndex];
-                document.getElementById('card-cat').innerText = item.category;
-                document.getElementById('card-term').innerText = item.term;
-                document.getElementById('card-phone').innerText = item.phonetic;
-                document.getElementById('card-meaning').innerText = item.meaning;
-                document.getElementById('card-context').innerText = item.context;
-                document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${vocabulary.length}`;
-                
-                updateCardStarState();
-                document.getElementById('prev-btn').disabled = currentIndex === 0;
-                document.getElementById('next-btn').disabled = currentIndex === vocabulary.length - 1;
-            }, 150);
-        }
-
-        function flipCard() {
-            document.getElementById('card').classList.toggle('flipped');
-        }
-
-        function prevCard() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateCard();
-            }
-        }
-
-        function nextCard() {
-            if (currentIndex < vocabulary.length - 1) {
-                currentIndex++;
-                updateCard();
-            }
-        }
-
-        function speakTerm(e) {
-            e.stopPropagation();
-            const term = vocabulary[currentIndex].term.split('/')[0].replace(/[¡!¿?]/g, '');
-            const utterance = new SpeechSynthesisUtterance(term);
-            utterance.lang = 'es-MX';
-            speechSynthesis.speak(utterance);
-        }
-
-        // Slang Quiz
-        let quizQuestions = [];
-
-        function startQuiz() {
-            quizQuestions = [...vocabulary].sort(() => Math.random() - 0.5);
-            currentQuizIndex = 0;
-            renderQuestion();
-        }
-
-        function renderQuestion() {
-            const item = quizQuestions[currentQuizIndex];
-            document.getElementById('quiz-q').innerText = `What does "${item.term}" mean?`;
-            document.getElementById('quiz-feedback').innerText = '';
-            document.getElementById('quiz-next-btn').style.display = 'none';
-
-            let options = [item.meaning];
-            while (options.length < 4) {
-                let randomItem = vocabulary[Math.floor(Math.random() * vocabulary.length)].meaning;
-                if (!options.includes(randomItem)) options.push(randomItem);
-            }
-            options.sort(() => Math.random() - 0.5);
-
-            const optionsGrid = document.getElementById('quiz-options');
-            optionsGrid.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(btn, opt, item);
-                optionsGrid.appendChild(btn);
-            });
-        }
-
-        function checkAnswer(selectedBtn, selectedOpt, item) {
-            const buttons = document.querySelectorAll('#quiz-options .option-btn');
-            buttons.forEach(b => b.disabled = true);
-
-            if (selectedOpt === item.meaning) {
-                selectedBtn.classList.add('correct');
-                document.getElementById('quiz-feedback').innerText = "¡Exacto! That's correct.";
-                document.getElementById('quiz-feedback').style.color = "#2E7D32";
-            } else {
-                selectedBtn.classList.add('wrong');
-                buttons.forEach(b => {
-                    if (b.innerText === item.meaning) b.classList.add('correct');
-                });
-                document.getElementById('quiz-feedback').innerText = `Not quite! Correct answer: ${item.meaning}`;
-                document.getElementById('quiz-feedback').style.color = "#C62828";
-                
-                // Track weak area
-                addWeakArea(item.id);
-            }
-
-            document.getElementById('quiz-next-btn').style.display = 'inline-block';
-        }
-
-        function nextQuestion() {
-            currentQuizIndex++;
-            if (currentQuizIndex < quizQuestions.length) {
-                renderQuestion();
-            } else {
-                document.getElementById('quiz-q').innerText = "🎉 Slang Quiz Complete! Check your 'Weak Areas' tab to review any missed terms.";
-                document.getElementById('quiz-options').innerHTML = '';
-                document.getElementById('quiz-feedback').innerText = '';
-                document.getElementById('quiz-next-btn').style.display = 'none';
-            }
-        }
-
-        // Menu Decoder Quiz
-        function startMenuQuiz() {
-            currentMenuIndex = 0;
-            renderMenuQuestion();
-        }
-
-        function renderMenuQuestion() {
-            const item = menuDishes[currentMenuIndex];
-            document.getElementById('menu-dish-name').innerText = item.dish;
-            document.getElementById('menu-q').innerText = item.question;
-            document.getElementById('menu-feedback').innerText = '';
-            document.getElementById('menu-next-btn').style.display = 'none';
-
-            let options = [...item.options].sort(() => Math.random() - 0.5);
-            const optionsGrid = document.getElementById('menu-options');
-            optionsGrid.innerHTML = '';
-
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = opt;
-                btn.onclick = () => checkMenuAnswer(btn, opt, item);
-                optionsGrid.appendChild(btn);
-            });
-        }
-
-        function checkMenuAnswer(selectedBtn, selectedOpt, item) {
-            const buttons = document.querySelectorAll('#menu-options .option-btn');
-            buttons.forEach(b => b.disabled = true);
-
-            if (selectedOpt === item.correct) {
-                selectedBtn.classList.add('correct');
-                document.getElementById('menu-feedback').innerText = `¡Buen provecho! ${item.explanation}`;
-                document.getElementById('menu-feedback').style.color = "#2E7D32";
-            } else {
-                selectedBtn.classList.add('wrong');
-                buttons.forEach(b => {
-                    if (b.innerText === item.correct) b.classList.add('correct');
-                });
-                document.getElementById('menu-feedback').innerText = `Not quite. ${item.explanation}`;
-                document.getElementById('menu-feedback').style.color = "#C62828";
-                
-                // Track weak area for menu items
-                addWeakArea(item.id);
-            }
-
-            document.getElementById('menu-next-btn').style.display = 'inline-block';
-        }
-
-        function nextMenuQuestion() {
-            currentMenuIndex++;
-            if (currentMenuIndex < menuDishes.length) {
-                renderMenuQuestion();
-            } else {
-                document.getElementById('menu-dish-name').innerText = "🎉 Menu Decoder Mastered!";
-                document.getElementById('menu-q').innerText = "You're ready to order like a chef on the boardwalk.";
-                document.getElementById('menu-options').innerHTML = '';
-                document.getElementById('menu-feedback').innerText = '';
-                document.getElementById('menu-next-btn').style.display = 'none';
-            }
-        }
-
-        // Render Weak Areas Tab
-        function renderWeakAreas() {
-            const listContainer = document.getElementById('weak-list');
-            listContainer.innerHTML = '';
-
-            const weakVocab = vocabulary.filter(v => weakIds.includes(v.id));
-            const weakMenu = menuDishes.filter(m => weakIds.includes(m.id));
-
-            if (weakVocab.length === 0 && weakMenu.length === 0) {
-                listContainer.innerHTML = '<div style="color:#888; padding:20px; text-align:center;">No missed items yet! When you answer incorrectly on any quiz, items will automatically show up here for targeted review.</div>';
-                document.getElementById('start-weak-quiz-btn').style.display = 'none';
-                document.getElementById('weak-quiz-container').style.display = 'none';
-                return;
-            }
-
-            document.getElementById('start-weak-quiz-btn').style.display = 'inline-block';
-
-            weakVocab.forEach(v => {
-                const item = document.createElement('div');
-                item.className = 'cheat-item';
-                item.innerHTML = `
-                    <div>
-                        <div class="cheat-term">${v.term} <span style="font-weight:normal; font-size:0.85rem; color:var(--accent);">[Vocab]</span></div>
-                        <div><strong>Meaning:</strong> ${v.meaning}</div>
-                        <div style="font-size:0.9rem; color:#555;">${v.context}</div>
-                    </div>
-                    <button class="ctrl-btn" style="background:#E53935; padding:4px 10px; font-size:0.8rem;" onclick="removeWeakArea(${v.id})">Remove</button>
-                `;
-                listContainer.appendChild(item);
-            });
-
-            weakMenu.forEach(m => {
-                const item = document.createElement('div');
-                item.className = 'cheat-item';
-                item.innerHTML = `
-                    <div>
-                        <div class="cheat-term" style="font-size: 1.3rem; text-decoration: underline;">${m.dish} <span style="font-weight:normal; font-size:0.85rem; color:var(--primary); text-decoration: none;">[Menu Item]</span></div>
-                        <div><strong>Correct Info:</strong> ${m.correct}</div>
-                        <div style="font-size:0.9rem; color:#555;">${m.explanation}</div>
-                    </div>
-                    <button class="ctrl-btn" style="background:#E53935; padding:4px 10px; font-size:0.8rem;" onclick="removeWeakArea(${m.id})">Remove</button>
-                `;
-                listContainer.appendChild(item);
-            });
-        }
-
-        // Weak Areas Practice Quiz
-        function startWeakQuiz() {
-            const weakVocab = vocabulary.filter(v => weakIds.includes(v.id)).map(v => ({ type: 'vocab', data: v }));
-            const weakMenu = menuDishes.filter(m => weakIds.includes(m.id)).map(m => ({ type: 'menu', data: m }));
-            
-            weakQuizItems = [...weakVocab, ...weakMenu].sort(() => Math.random() - 0.5);
-            if (weakQuizItems.length === 0) return;
-
-            currentWeakQuizIndex = 0;
-            document.getElementById('weak-quiz-container').style.display = 'block';
-            renderWeakQuestion();
-        }
-
-        function renderWeakQuestion() {
-            const itemObj = weakQuizItems[currentWeakQuizIndex];
-            document.getElementById('weak-feedback').innerText = '';
-            document.getElementById('weak-next-btn').style.display = 'none';
-
-            const optionsGrid = document.getElementById('weak-options');
-            optionsGrid.innerHTML = '';
-
-            if (itemObj.type === 'vocab') {
-                const item = itemObj.data;
-                document.getElementById('weak-q').innerText = `[Vocab] What does "${item.term}" mean?`;
-                let options = [item.meaning];
-                while (options.length < 4) {
-                    let randomItem = vocabulary[Math.floor(Math.random() * vocabulary.length)].meaning;
-                    if (!options.includes(randomItem)) options.push(randomItem);
-                }
-                options.sort(() => Math.random() - 0.5);
-
-                options.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = opt;
-                    btn.onclick = () => checkWeakAnswer(btn, opt, item.meaning, item.id);
-                    optionsGrid.appendChild(btn);
-                });
-            } else {
-                const item = itemObj.data;
-                document.getElementById('weak-q').innerText = `[Menu] "${item.dish}": ${item.question}`;
-                let options = [...item.options].sort(() => Math.random() - 0.5);
-
-                options.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = opt;
-                    btn.onclick = () => checkWeakAnswer(btn, opt, item.correct, item.id);
-                    optionsGrid.appendChild(btn);
-                });
-            }
-        }
-
-        function checkWeakAnswer(selectedBtn, selectedOpt, correctOpt, itemId) {
-            const buttons = document.querySelectorAll('#weak-options .option-btn');
-            buttons.forEach(b => b.disabled = true);
-
-            if (selectedOpt === correctOpt) {
-                selectedBtn.classList.add('correct');
-                document.getElementById('weak-feedback').innerText = "¡Excelente! You mastered this one! (Removed from Weak Areas)";
-                document.getElementById('weak-feedback').style.color = "#2E7D32";
-                
-                // Remove solved item from weak list
-                weakIds = weakIds.filter(i => i !== itemId);
-                localStorage.setItem('pv_weak_ids', JSON.stringify(weakIds));
-                updateCounts();
-            } else {
-                selectedBtn.classList.add('wrong');
-                buttons.forEach(b => {
-                    if (b.innerText === correctOpt) b.classList.add('correct');
-                });
-                document.getElementById('weak-feedback').innerText = `Not quite! Correct: ${correctOpt}`;
-                document.getElementById('weak-feedback').style.color = "#C62828";
-            }
-
-            document.getElementById('weak-next-btn').style.display = 'inline-block';
-        }
-
-        function nextWeakQuestion() {
-            currentWeakQuizIndex++;
-            if (currentWeakQuizIndex < weakQuizItems.length) {
-                renderWeakQuestion();
-            } else {
-                document.getElementById('weak-q').innerText = "🎉 Practice Session Finished!";
-                document.getElementById('weak-options').innerHTML = '';
-                document.getElementById('weak-feedback').innerText = 'Great job reviewing your missed items!';
-                document.getElementById('weak-next-btn').style.display = 'none';
-                renderWeakAreas();
-            }
-        }
-
-        // Cheat Sheet & Filter
-        function renderCheatSheet() {
-            const filterText = (document.getElementById('search-input')?.value || '').toLowerCase();
-            const listContainer = document.getElementById('cheat-list');
-            listContainer.innerHTML = '';
-
-            const filtered = vocabulary.filter(v => 
-                v.term.toLowerCase().includes(filterText) ||
-                v.meaning.toLowerCase().includes(filterText) ||
-                v.category.toLowerCase().includes(filterText)
-            );
-
-            if (filtered.length === 0) {
-                listContainer.innerHTML = '<div style="color:#888; padding:20px; text-align:center;">No matching terms found.</div>';
-                return;
-            }
-
-            filtered.forEach(v => {
-                const isStarred = starredIds.includes(v.id);
-                const item = document.createElement('div');
-                item.className = 'cheat-item';
-                item.innerHTML = `
-                    <div>
-                        <div class="cheat-term">${v.term} <span style="font-weight:normal; font-size:0.9rem; color:#888;">(${v.phonetic})</span></div>
-                        <div><strong>Meaning:</strong> ${v.meaning}</div>
-                        <div style="font-size:0.9rem; color:#555;">${v.context}</div>
-                    </div>
-                    <button class="star-btn ${isStarred ? 'starred' : ''}" style="position:relative; top:0; right:0;" onclick="toggleCheatStar(${v.id})">★</button>
-                `;
-                listContainer.appendChild(item);
-            });
-        }
-
-        function toggleCheatStar(id) {
-            toggleStarId(id);
-            renderCheatSheet();
-        }
-
-        // Render Favorites
-        function renderFavorites() {
-            const favContainer = document.getElementById('fav-list');
-            favContainer.innerHTML = '';
-
-            const favItems = vocabulary.filter(v => starredIds.includes(v.id));
-
-            if (favItems.length === 0) {
-                favContainer.innerHTML = 'No favorites starred yet! Click the star icon (★) on any flashcard or cheat sheet item to add it here.';
-                return;
-            }
-
-            favItems.forEach(v => {
-                const item = document.createElement('div');
-                item.className = 'cheat-item';
-                item.innerHTML = `
-                    <div>
-                        <div class="cheat-term">${v.term} <span style="font-weight:normal; font-size:0.9rem; color:#888;">(${v.phonetic})</span></div>
-                        <div><strong>Meaning:</strong> ${v.meaning}</div>
-                        <div style="font-size:0.9rem; color:#555;">${v.context}</div>
-                    </div>
-                    <button class="star-btn starred" style="position:relative; top:0; right:0;" onclick="removeFavorite(${v.id})">★</button>
-                `;
-                favContainer.appendChild(item);
-            });
-        }
-
-        function removeFavorite(id) {
-            toggleStarId(id);
-            renderFavorites();
-        }
-
-        // Initialize
-        updateCounts();
-        updateCard();
-    </script>
+    // App Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHuntUI();
+    });
+  </script>
 </body>
 </html>
