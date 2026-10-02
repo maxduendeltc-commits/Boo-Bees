@@ -540,6 +540,15 @@
             margin-top: 2px;
         }
 
+        .random-challenge-box {
+            background: #FFF3E0;
+            border: 2px dashed #FF9800;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
         /* Food & Beverages Grid */
         .food-grid {
             display: grid;
@@ -695,7 +704,7 @@
                 </a>
             </div>
             <div class="phrase-box">
-                🗣️️ <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
+                🗣 <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
             </div>
         </div>
 
@@ -731,17 +740,35 @@
     <!-- SCAVENGER HUNT VIEW -->
     <div id="scavenger" class="view">
         <div class="info-card">
-            <div class="info-title">📸 Vallarta Scavenger Hunt</div>
+            <div class="info-title">📸 Vallarta Scavenger Hunt (40 Challenges)</div>
             <p>Complete items across Puerto Vallarta by capturing photos or videos with your group!</p>
+            
             <div class="hunt-progress-bar">
                 <div class="hunt-progress-fill" id="hunt-progress"></div>
             </div>
-            <div style="font-size: 0.9rem; font-weight: bold; color: var(--primary-dark);" id="hunt-status">
-                0 of 0 Completed (0%)
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                <div style="font-size: 0.95rem; font-weight: bold; color: var(--primary-dark);" id="hunt-status">
+                    0 of 40 Completed (0%)
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="ctrl-btn secondary" style="padding: 8px 14px; font-size: 0.85rem;" onclick="generateRandomChallenge()">🎲 Random Challenge</button>
+                    <button class="ctrl-btn danger" style="padding: 8px 14px; font-size: 0.85rem;" onclick="resetScavengerHunt()">🔄 Reset All</button>
+                </div>
+            </div>
+
+            <!-- Random Challenge Generator Output -->
+            <div class="random-challenge-box" id="random-box">
+                <div style="font-weight: bold; color: var(--accent); font-size: 0.85rem; text-transform: uppercase;">🎯 Target Challenge:</div>
+                <div id="random-title" style="font-weight: bold; font-size: 1.1rem; color: var(--primary-dark); margin: 4px 0;"></div>
+                <div id="random-desc" style="font-size: 0.95rem; color: var(--text);"></div>
             </div>
         </div>
+
+        <input type="text" id="hunt-search" class="search-box" placeholder="Search scavenger hunt list..." onkeyup="filterHunt()">
+
         <div id="hunt-container">
-            <!-- Hunt Items dynamically generated -->
+            <!-- 40 Hunt Items dynamically generated -->
         </div>
     </div>
 
@@ -956,17 +983,53 @@
             }
         ];
 
-        // SCAVENGER HUNT DATA
+        // RESTORED FULL 40 SCAVENGER HUNT ITEMS
         const scavengerData = [
-            { id: "h1", title: "Spot a Tuba Vendor", desc: "Find a vendor selling Tuba on the Malecón with a traditional decorated gourd." },
-            { id: "h2", title: "Eat Pescado Embarazado", desc: "Try grilled fish on a stick right on the beach." },
-            { id: "h3", title: "Pose with the Boy on the Seahorse Sculpture", desc: "Take a group photo by Vallarta's famous Malecón sculpture." },
-            { id: "h4", title: "Ride a Local Panga Boat", desc: "Catch a water taxi heading south along the coastline." },
-            { id: "h5", title: "Sip a Raicilla Cocktail", desc: "Try Jalisco's artisanal agave spirit at a local bar." }
+            { id: "h1", title: "Spot a Tuba Vendor", desc: "Find a vendor selling Tuba on the Malecón carrying a traditional decorated gourd." },
+            { id: "h2", title: "Eat Pescado Embarazado", desc: "Try grilled fish or marlin on a bamboo skewer right on the beach." },
+            { id: "h3", title: "Pose with the Seahorse Statue", desc: "Take a group photo by Vallarta's iconic 'El Boy on the Seahorse' sculpture on the boardwalk." },
+            { id: "h4", title: "Ride a Local Panga Boat", desc: "Catch a motorized water taxi heading south along Banderas Bay." },
+            { id: "h5", title: "Sip a Raicilla Cocktail", desc: "Order a cocktail made with Jalisco's local smoky agave spirit." },
+            { id: "h6", title: "Photograph Los Muertos Pier", desc: "Snap a photo of the iconic sail-shaped pier in Zona Romántica." },
+            { id: "h7", title: "Find the Church of Our Lady of Guadalupe", desc: "Take a photo of the famous wrought-iron crown atop the parish church." },
+            { id: "h8", title: "Spot a Wild Iguana", desc: "Find a wild iguana lounging in the trees along the Cuale River or in a park." },
+            { id: "h9", title: "Order Tacos al Pastor con Todo", desc: "Get street tacos carved directly from a spinning spit (trompo) with pineapple." },
+            { id: "h10", title: "Walk Across a Cuale River Suspension Bridge", desc: "Cross one of the wooden hanging footbridges connecting Centro to Cuale Island." },
+            { id: "h11", title: "Drink Fresh Tejuino", desc: "Try a cold fermented corn drink topped with lime shaved ice." },
+            { id: "h12", title: "Spot the Voladores de Papantla", desc: "Watch the pole flyers perform their traditional high-flying ritual on the Malecón." },
+            { id: "h13", title: "Buy Something at Cuale Island Flea Market", desc: "Bargain respectfully for a souvenir at the artisan market along the river." },
+            { id: "h14", title: "Watch the Sunset Over Banderas Bay", desc: "Capture a group sunset photo right from the shore or a beach bar." },
+            { id: "h15", title: "Find a Street Art Mural in Zona Romántica", desc: "Locate and snap a picture in front of a colorful local wall painting." },
+            { id: "h16", title: "Ride the Local City Bus ('Camión')", desc: "Take a green or blue public bus through town for $10 pesos." },
+            { id: "h17", title: "Eat Quesabirria Tacos with Consomé", desc: "Dip a crispy beef or goat birria taco into rich broth." },
+            { id: "h18", title: "Find 'The Rotunda of the Sea' Statues", desc: "Locate Alejandro Colunga's bronze chairs sculpture along the Malecón." },
+            { id: "h19", title: "Spot a Pelican Diving for Fish", desc: "Photograph a brown pelican swooping into the ocean." },
+            { id: "h20", title: "Order a Fresh Coconut (Coco Frío)", desc: "Buy a whole fresh coconut chopped open with a machete." },
+            { id: "h21", title: "Eat Zarandeado Style Fish", desc: "Enjoy whole fish grilled over coals in a wood-fired metal basket." },
+            { id: "h22", title: "Visit a Local Panadería", desc: "Pick out fresh pan dulce or conchas with tongs and a metal tray." },
+            { id: "h23", title: "Drink a Pacifico or Corona with Lime & Salt", desc: "Enjoy a cold Mexican beer right on the sand." },
+            { id: "h24", title: "Find the Elizabeth Taylor & Richard Burton Statue", desc: "Locate the historic statue honoring the famous Hollywood couple near Casa Kimberly." },
+            { id: "h25", title: "Spot a Water Taxi departing Los Muertos Pier", desc: "Snap a photo of passengers boarding a panga from the pier." },
+            { id: "h26", title: "High-Five a Sandcastle Sculptor", desc: "Check out the detailed sand sculptures crafted along the Malecón beach." },
+            { id: "h27", title: "Try Fresh Aguachile", desc: "Order a plate of lime-cured raw spicy shrimp." },
+            { id: "h28", title: "Find a Donkey wearing a Sombrero", desc: "Spot a traditional photo donkey around town or along Olas Altas." },
+            { id: "h29", title: "Look for Whales or Dolphins", desc: "Spot a whale spout or dolphin pod breaking the ocean surface." },
+            { id: "h30", title: "Visit Los Arcos Marine Park", desc: "See the famous granite rock islands south of the bay." },
+            { id: "h31", title: "Buy Fresh Fruit from a Street Cart", desc: "Get sliced mango, cucumber, or watermelon sprinkled with Tajín and lime." },
+            { id: "h32", title: "Find a Traditional Mariachi Band", desc: "See or listen to a live mariachi performance in a plaza or restaurant." },
+            { id: "h33", title: "Spot the Marina Lighthouse ('Faro')", desc: "Locate the lighthouse overlooking the yachts in Marina Vallarta." },
+            { id: "h34", title: "Order Churros Fresh from a Cart", desc: "Buy warm, cinnamon-sugar churros from a local street stand." },
+            { id: "h35", title: "Find a Custom Beaded Huichol Artwork", desc: "Admire detailed yarn or bead artwork crafted by indigenous Wixárika artists." },
+            { id: "h36", title: "Dip Your Feet in the Pacific Ocean", desc: "Take a quick wade into the surf anywhere along the coastline." },
+            { id: "h37", title: "Spot a Street Taco Stand with a Big Line", desc: "Identify a popular local taco spot packed with locals." },
+            { id: "h38", title: "Say '¡Gracias, Pata Salada!' to a Local", desc: "Use local slang to thank a friendly Vallarta resident." },
+            { id: "h39", title: "Photograph a Cobblestone Street View", desc: "Capture a classic view looking up a steep cobblestone street toward the hills." },
+            { id: "h40", title: "Take a Group Selfie at Plaza Arms / Zócalo", desc: "Gather everyone in the main central plaza in front of the gazebo." }
         ];
 
         // APP STATE
         let favorites = JSON.parse(localStorage.getItem('pv_favorites')) || [];
+        let huntCompleted = JSON.parse(localStorage.getItem('pv_hunt_completed')) || [];
         let currentCardIdx = 0;
         let isCardFlipped = false;
         let quizScore = 0;
@@ -1162,7 +1225,7 @@
                         </a>
 
                         <div style="margin-top: 12px; font-weight: bold; font-size: 0.9rem; color: var(--primary-dark);">
-                            ⏱️️ Transit & Travel Times (From Resort Area):
+                            ⏱ Transit & Travel Times (From Resort Area):
                         </div>
                         <div class="transit-grid">
                             <div class="transit-item"><span>🚶 Walking</span>${item.transit.walk}</div>
@@ -1187,14 +1250,15 @@
             });
         }
 
-        // SCAVENGER HUNT FUNCTIONS
+        // SCAVENGER HUNT FUNCTIONS (RESTORED RANDOM GENERATOR & RESET ALL)
         function renderScavenger() {
             const container = document.getElementById('hunt-container');
             let html = '';
             scavengerData.forEach(item => {
+                const isChecked = huntCompleted.includes(item.id);
                 html += `
-                    <div class="hunt-item" id="hunt-item-${item.id}">
-                        <input type="checkbox" onchange="toggleHuntItem('${item.id}', this)">
+                    <div class="hunt-item ${isChecked ? 'completed' : ''}" id="hunt-item-${item.id}">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleHuntItem('${item.id}', this)">
                         <div>
                             <div class="hunt-title">${item.title}</div>
                             <div class="hunt-desc">${item.desc}</div>
@@ -1210,18 +1274,54 @@
             const el = document.getElementById(`hunt-item-${id}`);
             if (checkbox.checked) {
                 el.classList.add('completed');
+                if (!huntCompleted.includes(id)) huntCompleted.push(id);
             } else {
                 el.classList.remove('completed');
+                huntCompleted = huntCompleted.filter(itemId => itemId !== id);
             }
+            localStorage.setItem('pv_hunt_completed', JSON.stringify(huntCompleted));
             updateHuntProgress();
         }
 
         function updateHuntProgress() {
             const total = scavengerData.length;
-            const checked = document.querySelectorAll('#hunt-container input[type="checkbox"]:checked').length;
+            const checked = huntCompleted.length;
             const pct = Math.round((checked / total) * 100);
             document.getElementById('hunt-progress').style.width = `${pct}%`;
             document.getElementById('hunt-status').innerText = `${checked} of ${total} Completed (${pct}%)`;
+        }
+
+        function generateRandomChallenge() {
+            const remaining = scavengerData.filter(item => !huntCompleted.includes(item.id));
+            const box = document.getElementById('random-box');
+            
+            if (remaining.length === 0) {
+                document.getElementById('random-title').innerText = "🎉 All 40 Challenges Completed!";
+                document.getElementById('random-desc').innerText = "Congratulations! You've checked off every single item on the scavenger hunt.";
+            } else {
+                const randomItem = remaining[Math.floor(Math.random() * remaining.length)];
+                document.getElementById('random-title').innerText = randomItem.title;
+                document.getElementById('random-desc').innerText = randomItem.desc;
+            }
+            box.style.display = 'block';
+        }
+
+        function resetScavengerHunt() {
+            if (confirm("Are you sure you want to reset all scavenger hunt progress?")) {
+                huntCompleted = [];
+                localStorage.setItem('pv_hunt_completed', JSON.stringify(huntCompleted));
+                document.getElementById('random-box').style.display = 'none';
+                renderScavenger();
+            }
+        }
+
+        function filterHunt() {
+            const query = document.getElementById('hunt-search').value.toLowerCase();
+            const items = document.querySelectorAll('#hunt-container .hunt-item');
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(query) ? 'flex' : 'none';
+            });
         }
 
         // CHEAT SHEET FUNCTIONS
