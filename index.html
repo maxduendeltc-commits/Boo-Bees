@@ -231,6 +231,14 @@
             background: var(--accent);
         }
 
+        .ctrl-btn.danger {
+            background: #D32F2F;
+        }
+
+        .ctrl-btn.danger:hover {
+            background: #B71C1C;
+        }
+
         .ctrl-btn:disabled {
             background: #CCC;
             cursor: not-allowed;
@@ -527,6 +535,7 @@
             padding: 3px 8px;
             border-radius: 10px;
             margin-bottom: 6px;
+            display: inline-block;
         }
 
         .diff-easy { background: #C8E6C9; color: #1B5E20; }
@@ -559,6 +568,13 @@
             cursor: pointer;
         }
 
+        .hunt-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .hunt-title {
             font-weight: bold;
             font-size: 1.05rem;
@@ -568,6 +584,7 @@
         .hunt-desc {
             font-size: 0.9rem;
             color: var(--light-text);
+            margin-top: 2px;
         }
 
         .hunt-phrase {
@@ -752,7 +769,7 @@
             </div>
         </div>
 
-        <!-- GENERATOR CARD WITH FOUND IT BUTTON -->
+        <!-- GENERATOR CARD WITH FOUND IT & RESET BUTTONS -->
         <div class="generator-card">
             <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary-dark);">🎲 Random Target Challenge</div>
             <p style="font-size: 0.9rem; color: #555; margin-top: 4px;">Click to generate a target item to find right now on your walk!</p>
@@ -764,6 +781,7 @@
             <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                 <button class="ctrl-btn" onclick="generateRandomHuntItem()">🎲 Generate Random Challenge</button>
                 <button class="ctrl-btn secondary" id="found-it-btn" onclick="markTargetFound()" style="display: none;">✅ Found It!</button>
+                <button class="ctrl-btn danger" onclick="resetAllHuntItems()">🔄 Reset All</button>
             </div>
         </div>
 
@@ -834,7 +852,7 @@
             { term: "Agua de Coco", phone: "AH-gwah deh KOH-koh", meaning: "Fresh Coconut Water", context: "Sold fresh by beach vendors along the Malecón.", cat: "Food & Drink" }
         ];
 
-        // All 40 Scavenger Hunt Items
+        // All 40 Scavenger Hunt Items with Difficulty Ratings
         const huntItems = [
             { id: 1, title: "Bronze Seahorse Statue", desc: "The famous 'El Niño Sobre el Caballo de Mar' sculpture on the Malecón.", phrase: "¿Dónde está la estatua del caballito de mar?", diff: "easy" },
             { id: 2, title: "Fresh Coconut Vendor", desc: "Buy a fresh coconut prepared with lime and tajín.", phrase: "Un agua de coco por favor.", diff: "easy" },
@@ -847,7 +865,7 @@
             { id: 9, title: "Los Muertos Pier at Night", desc: "Take a photo of the sailboat-shaped pier illuminated after sunset.", phrase: "El muelle de Los Muertos", diff: "easy" },
             { id: 10, title: "Huichol Yarn or Bead Art", desc: "Spot vibrant native Huichol (Wixárika) handicrafts in a local shop.", phrase: "Arte Huichol", diff: "easy" },
             { id: 11, title: "Yellow City Bus (Combi)", desc: "Ride or snap a photo of a local Vallarta public bus.", phrase: "¿Este autobús va al centro?", diff: "easy" },
-            { id: 12, title: "Charro Statue", desc: "Locate the statue of the Mexican horseman on the Malecón.", phrase: "El Charrro en el Malecón", diff: "easy" },
+            { id: 12, title: "Charro Statue", desc: "Locate the statue of the Mexican horseman on the Malecón.", phrase: "El Charro en el Malecón", diff: "easy" },
             { id: 13, title: "Agua Fresca Stand", desc: "Order a cold agua de horchata, jamaica, or tamarindo.", phrase: "Una agua fresca de jamaica, por favor.", diff: "easy" },
             { id: 14, title: "Iguana in Trees / Park", desc: "Spot a giant wild iguana in Cuale River Island or a local park.", phrase: "Mira, ¡una iguana!", diff: "medium" },
             { id: 15, title: "Cerveza Pacífico with Lime", desc: "Enjoy a ice-cold local Pacifico beer by the ocean.", phrase: "Una Pacífico bien fría, por favor.", diff: "easy" },
@@ -973,7 +991,10 @@
                 itemEl.innerHTML = `
                     <input type="checkbox" id="hunt-${item.id}" ${isChecked ? 'checked' : ''} onchange="toggleHuntItem(${item.id})">
                     <div>
-                        <div class="hunt-title">${item.id}. ${item.title}</div>
+                        <div class="hunt-title-row">
+                            <span class="hunt-title">${item.id}. ${item.title}</span>
+                            <span class="gen-difficulty diff-${item.diff}">${item.diff}</span>
+                        </div>
                         <div class="hunt-desc">${item.desc}</div>
                         <div class="hunt-phrase">🗣️ ${item.phrase}</div>
                     </div>
@@ -1039,6 +1060,19 @@
                 
                 // Automatically generate the next target
                 generateRandomHuntItem();
+            }
+        }
+
+        // "Reset All" Button Trigger Function
+        function resetAllHuntItems() {
+            if (confirm("Are you sure you want to reset all completed scavenger hunt items?")) {
+                completedHuntIds.clear();
+                currentTargetHuntId = null;
+                document.getElementById('target-box').innerHTML = `
+                    <span style="color: #888; font-style: italic;">Click "Generate Random Challenge" below to start!</span>
+                `;
+                document.getElementById('found-it-btn').style.display = 'none';
+                renderScavengerHunt();
             }
         }
 
