@@ -325,7 +325,7 @@
             font-weight: bold;
             color: var(--primary-dark);
             margin-bottom: 5px;
-            padding-right: 30px;
+            padding-right: 35px;
         }
 
         .attraction-tag {
@@ -356,39 +356,15 @@
             margin-top: 10px;
         }
 
-        .directions-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        @media(min-width: 600px) {
-            .directions-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .dir-item {
-            background: #F9F9F9;
-            border: 1px solid #EEE;
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        .dir-es {
-            font-weight: bold;
-            color: var(--accent);
-        }
-
         .transit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
             gap: 8px;
             margin: 12px 0;
             background: #F4F7F6;
             padding: 10px;
             border-radius: 8px;
+            border: 1px solid #E0E0E0;
         }
 
         .transit-item {
@@ -401,6 +377,25 @@
             font-weight: bold;
             color: var(--primary-dark);
             font-size: 0.95rem;
+        }
+
+        .map-pin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #E0F2F1;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .map-pin-btn:hover {
+            background: #B2DFDB;
         }
 
         .calc-box {
@@ -507,43 +502,6 @@
             transition: width 0.3s ease;
         }
 
-        .generator-card {
-            background: #E0F2F1;
-            border: 2px dashed var(--primary);
-            padding: 20px;
-            border-radius: var(--radius);
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .gen-target-box {
-            background: #FFFFFF;
-            border: 1px solid #B2DFDB;
-            padding: 18px;
-            border-radius: 10px;
-            margin-top: 15px;
-            min-height: 110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-
-        .gen-difficulty {
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            display: inline-block;
-        }
-
-        .diff-easy { background: #C8E6C9; color: #1B5E20; }
-        .diff-medium { background: #FFE082; color: #E65100; }
-        .diff-hard { background: #FFCDD2; color: #B71C1C; }
-
         .hunt-item {
             display: flex;
             align-items: flex-start;
@@ -570,13 +528,6 @@
             cursor: pointer;
         }
 
-        .hunt-title-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
         .hunt-title {
             font-weight: bold;
             font-size: 1.05rem;
@@ -587,18 +538,6 @@
             font-size: 0.9rem;
             color: var(--light-text);
             margin-top: 2px;
-        }
-
-        .hunt-phrase {
-            display: inline-block;
-            background: #FFF8E1;
-            border: 1px solid #FFE082;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-top: 5px;
-            color: #333;
         }
 
         /* Food & Beverages Grid */
@@ -686,15 +625,6 @@
         .fav-star-btn:hover {
             transform: scale(1.2);
         }
-
-        .fav-section-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary-dark);
-            margin: 20px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid var(--primary);
-        }
     </style>
 </head>
 <body>
@@ -708,7 +638,7 @@
         <button class="tab-btn active" onclick="switchTab('flashcards', event)">Flashcards</button>
         <button class="tab-btn" onclick="switchTab('food', event)">🌮 Local Food & Drinks</button>
         <button class="tab-btn" onclick="switchTab('logistics', event)">🚖 Hotel & Currency</button>
-        <button class="tab-btn" onclick="switchTab('attractions', event)">📍 Attractions</button>
+        <button class="tab-btn" onclick="switchTab('attractions', event)">📍 Attractions & Distances</button>
         <button class="tab-btn" onclick="switchTab('scavenger', event)">📸 Scavenger Hunt</button>
         <button class="tab-btn" onclick="switchTab('quiz', event)">Slang Quiz</button>
         <button class="tab-btn" onclick="switchTab('menuquiz', event)">Menu Decoder</button>
@@ -745,7 +675,7 @@
     <div id="food" class="view">
         <input type="text" id="food-search" class="search-box" placeholder="Search foods, beverages, or ingredients..." onkeyup="filterFood()">
         <div class="food-grid" id="food-container">
-            <!-- Food Cards dynamically generated here -->
+            <!-- Food Cards dynamically generated -->
         </div>
     </div>
 
@@ -760,12 +690,12 @@
                 <div style="font-size: 0.95rem; color: #555; margin-top: 4px;"><strong>Referencia:</strong> Por la Av. Francisco Medina Ascencio, Zona Hotelera Las Glorias</div>
             </div>
             <div style="margin-top: 10px; margin-bottom: 5px;">
-                <a href="https://www.google.com/maps/search/?api=1&query=Plaza+Pelicanos+Grand+Beach+Resort" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
-                    📍 Open Hotel Pin in Google Maps ↗
+                <a href="https://www.google.com/maps/search/?api=1&query=Plaza+Pelicanos+Grand+Beach+Resort+Puerto+Vallarta" target="_blank" class="map-pin-btn">
+                    📍 Drop Pin / View Hotel in Google Maps ↗
                 </a>
             </div>
             <div class="phrase-box">
-                🗣️ <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
+                🗣️️ <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
             </div>
         </div>
 
@@ -790,11 +720,11 @@
         </div>
     </div>
 
-    <!-- ATTRACTIONS VIEW -->
+    <!-- ATTRACTIONS & DISTANCES VIEW -->
     <div id="attractions" class="view">
-        <input type="text" id="attr-search" class="search-box" placeholder="Search attractions..." onkeyup="filterAttractions()">
+        <input type="text" id="attr-search" class="search-box" placeholder="Search attractions by name or tag..." onkeyup="filterAttractions()">
         <div id="attr-container">
-            <!-- Attraction Cards dynamically generated -->
+            <!-- Attraction Cards with Map Pins & Transit Timings generated via JS -->
         </div>
     </div>
 
@@ -952,35 +882,77 @@
             }
         ];
 
-        // ATTRACTIONS DATA
+        // ATTRACTIONS DATA WITH MAP PINS & TRANSIT TIMES (From Plaza Pelicanos Grand / Hotel Zone)
         const attractionsData = [
             {
                 id: "att1",
                 name: "El Malecón Boardwalk",
                 tag: "Iconic Promenade",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Malecon+Puerto+Vallarta",
                 desc: "A 1-mile seaside boardwalk packed with iconic bronze sculptures, street performers, local vendors, and vibrant nightlife.",
-                tip: "Great for sunset walks. Visit the Los Arcos amphitheater for free evening performances."
+                tip: "Great for sunset walks. Visit the Los Arcos amphitheater for free evening performances.",
+                transit: {
+                    walk: "45–55 min (2.2 mi)",
+                    uber: "10–15 min ($80–120 MXN)",
+                    bus: "15 min ($10 MXN - 'Centro' bus)",
+                    panga: "N/A"
+                }
             },
             {
                 id: "att2",
-                name: "Zona Romántica (Olas Altas)",
-                tag: "Historic Neighborhood",
+                name: "Zona Romántica (Olas Altas & Los Muertos)",
+                tag: "Historic Neighborhood & Beach",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Zona+Romantica+Puerto+Vallarta",
                 desc: "Cobblestone streets filled with charming boutique cafes, art galleries, lively beach clubs, and renowned taco stands.",
-                tip: "Head here for the best dining and vibrant evening street atmosphere."
+                tip: "Head here for the best dining, artisan night markets, and vibrant street atmosphere.",
+                transit: {
+                    walk: "60+ min (3.1 mi)",
+                    uber: "15–20 min ($100–150 MXN)",
+                    bus: "20 min ($10 MXN - 'Olas Altas' bus)",
+                    panga: "Water taxis depart from Los Muertos Pier"
+                }
             },
             {
                 id: "att3",
                 name: "Mismaloya & Los Arcos Marine Park",
                 tag: "Nature & Snorkeling",
-                desc: "Protected granite rock formations jutting out of the ocean, ideal for snorkeling, kayaking, and seeing marine life.",
-                tip: "Take a panga boat or water taxi out early in the morning for clearest water conditions."
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Los+Arcos+Marine+Park+Puerto+Vallarta",
+                desc: "Protected granite rock formations jutting out of the ocean, ideal for snorkeling, scuba diving, kayaking, and spotting marine life.",
+                tip: "Take a panga boat or kayak tour early in the morning for clearest water conditions.",
+                transit: {
+                    walk: "Not walkable (10.5 mi)",
+                    uber: "30–40 min ($220–300 MXN)",
+                    bus: "45 min ($10 MXN bus to Boca / Mismaloya)",
+                    panga: "10 min skiff ride from Mismaloya Beach"
+                }
             },
             {
                 id: "att4",
-                name: "Yelapa & South Shore Beaches",
-                tag: "Day Trip / Hideaway",
-                desc: "A car-free tropical cove accessible only by boat, featuring beachside palapa bars and a scenic jungle waterfall hike.",
-                tip: "Pangas depart regularly from Boca de Tomatlán pier."
+                name: "Yelapa & South Shore Coves",
+                tag: "Day Trip / Hidden Beach",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Yelapa+Jalisco+Mexico",
+                desc: "A car-free tropical cove village accessible only by ocean water taxi, featuring beachside palapa bars and a scenic jungle waterfall hike.",
+                tip: "Pangas depart regularly from Los Muertos Pier or Boca de Tomatlán pier.",
+                transit: {
+                    walk: "Boat access only",
+                    uber: "Uber to Boca Pier: 45 min ($250–350 MXN)",
+                    bus: "Bus to Boca Pier: 50 min ($10 MXN)",
+                    panga: "Panga Boat from Boca: 30 min ($120–150 MXN)"
+                }
+            },
+            {
+                id: "att5",
+                name: "Marina Vallarta & Lighthouse",
+                tag: "Yachts & Dining",
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Marina+Vallarta+Lighthouse",
+                desc: "Upscale marina walkway lined with luxury yachts, seafood restaurants, cocktail bars, and an iconic lighthouse cocktail lounge.",
+                tip: "Holds a popular Thursday evening art & food market during peak season.",
+                transit: {
+                    walk: "30–35 min (1.5 mi)",
+                    uber: "7–10 min ($60–90 MXN)",
+                    bus: "10 min ($10 MXN - 'Marina' bus)",
+                    panga: "N/A"
+                }
             }
         ];
 
@@ -1172,7 +1144,7 @@
             });
         }
 
-        // ATTRACTIONS FUNCTIONS
+        // ATTRACTIONS & DISTANCES FUNCTIONS
         function renderAttractions() {
             const container = document.getElementById('attr-container');
             let html = '';
@@ -1184,7 +1156,22 @@
                         <div class="info-title">${item.name}</div>
                         <span class="attraction-tag">${item.tag}</span>
                         <p style="margin-bottom: 8px;">${item.desc}</p>
-                        <div style="font-size: 0.85rem; color: var(--light-text); background: #F4F7F6; padding: 6px 10px; border-radius: 6px;">💡 <strong>Tip:</strong> ${item.tip}</div>
+                        
+                        <a href="${item.mapUrl}" target="_blank" class="map-pin-btn">
+                            📍 Drop Pin / View in Google Maps ↗
+                        </a>
+
+                        <div style="margin-top: 12px; font-weight: bold; font-size: 0.9rem; color: var(--primary-dark);">
+                            ⏱️️ Transit & Travel Times (From Resort Area):
+                        </div>
+                        <div class="transit-grid">
+                            <div class="transit-item"><span>🚶 Walking</span>${item.transit.walk}</div>
+                            <div class="transit-item"><span>🚕 Uber / Taxi</span>${item.transit.uber}</div>
+                            <div class="transit-item"><span>🚌 Bus (Camión)</span>${item.transit.bus}</div>
+                            <div class="transit-item"><span>🚤 Water Taxi</span>${item.transit.panga}</div>
+                        </div>
+
+                        <div style="font-size: 0.85rem; color: var(--light-text); background: #F4F7F6; padding: 6px 10px; border-radius: 6px; margin-top: 8px;">💡 <strong>Tip:</strong> ${item.tip}</div>
                     </div>
                 `;
             });
