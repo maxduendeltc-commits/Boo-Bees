@@ -1,156 +1,1089 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scavenger Hunt Tracker</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      max-width: 500px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      color: #333;
-    }
-    .progress-bar {
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-      padding: 0.75rem;
-      background: #eef2ff;
-      border-radius: 8px;
-      color: #3730a3;
-      text-align: center;
-    }
-    .item-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      margin-bottom: 0.75rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-    /* Style for completed items */
-    .item-card.found {
-      background-color: #f3f4f6;
-      border-color: #d1d5db;
-    }
-    .item-card.found .item-title {
-      text-decoration: line-through;
-      color: #9ca3af;
-    }
-    button.found-btn {
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button.found-btn.is-found {
-      background-color: #059669;
-    }
-    .reset-btn {
-      margin-top: 2rem;
-      width: 100%;
-      background: none;
-      border: 1px dashed #ef4444;
-      color: #ef4444;
-      padding: 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puerto Vallarta Slang & Local Guide</title>
+    <style>
+        :root {
+            --primary: #008080;
+            --primary-dark: #005959;
+            --accent: #E65100;
+            --bg: #F4F7F6;
+            --card-bg: #FFFFFF;
+            --text: #2C3E50;
+            --light-text: #666666;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --star-gold: #FFB300;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--light-text);
+        }
+
+        /* Navigation / Mode Selection */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #E0E0E0;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #D0D0D0;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Flashcard Styles */
+        .card-container {
+            perspective: 1000px;
+            height: 330px;
+            margin-bottom: 20px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius);
+            background: var(--card-bg);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: #FAFAFA;
+            border: 2px solid var(--primary);
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #E0F2F1;
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .star-btn {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #CCC;
+            transition: color 0.2s, transform 0.1s;
+        }
+
+        .star-btn.starred {
+            color: var(--star-gold);
+        }
+
+        .star-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .term {
+            font-size: 2.1rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .phonetic {
+            font-style: italic;
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .meaning {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .context {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            max-width: 90%;
+        }
+
+        .audio-btn {
+            background: #E0F2F1;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            color: var(--primary-dark);
+            transition: background 0.2s;
+        }
+
+        .audio-btn:hover {
+            background: #B2DFDB;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .ctrl-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .ctrl-btn.secondary {
+            background: var(--accent);
+        }
+
+        .ctrl-btn:disabled {
+            background: #CCC;
+            cursor: not-allowed;
+        }
+
+        /* Quiz Styles */
+        .quiz-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .quiz-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media(min-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option-btn {
+            background: #F0F0F0;
+            border: 2px solid #E0E0E0;
+            padding: 15px;
+            border-radius: var(--radius);
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: #E8F5E9;
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct {
+            background: #C8E6C9 !important;
+            border-color: #2E7D32 !important;
+            color: #1B5E20;
+        }
+
+        .option-btn.wrong {
+            background: #FFCDD2 !important;
+            border-color: #C62828 !important;
+            color: #B71C1C;
+        }
+
+        .quiz-feedback {
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 24px;
+        }
+
+        /* Logistics & Directions */
+        .info-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .info-card.accent-border {
+            border-left-color: var(--accent);
+        }
+
+        .info-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .attraction-tag {
+            display: inline-block;
+            background: #E0F2F1;
+            color: var(--primary-dark);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .phrase-box {
+            background: #FFF8E1;
+            border: 1px solid #FFE082;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .hotel-box {
+            background: #E8F5E9;
+            border: 2px dashed #4CAF50;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-top: 10px;
+        }
+
+        .directions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media(min-width: 600px) {
+            .directions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .dir-item {
+            background: #F9F9F9;
+            border: 1px solid #EEE;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .dir-es {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .transit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+            background: #F4F7F6;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .transit-item {
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        .transit-item span {
+            display: block;
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .calc-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .calc-input {
+            padding: 8px 12px;
+            border: 2px solid #DDD;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 120px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #DDD;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+        }
+
+        .cheat-sheet {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .cheat-item {
+            padding: 14px 0;
+            border-bottom: 1px solid #EEE;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .cheat-item:last-child {
+            border-bottom: none;
+        }
+
+        .cheat-term {
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+
+        .hint-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .menu-banner {
+            background: #EFEBE9;
+            border-left: 5px solid var(--accent);
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .dish-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: underline;
+            color: var(--primary-dark);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .dish-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Scavenger Hunt & Generator Styles */
+        .hunt-progress-bar {
+            width: 100%;
+            background-color: #E0E0E0;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 18px;
+            margin: 12px 0 20px 0;
+        }
+
+        .hunt-progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .generator-card {
+            background: #E0F2F1;
+            border: 2px dashed var(--primary);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .gen-target-box {
+            background: #FFFFFF;
+            border: 1px solid #B2DFDB;
+            padding: 18px;
+            border-radius: 10px;
+            margin-top: 15px;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .gen-difficulty {
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+        .diff-easy { background: #C8E6C9; color: #1B5E20; }
+        .diff-medium { background: #FFE082; color: #E65100; }
+        .diff-hard { background: #FFCDD2; color: #B71C1C; }
+
+        .hunt-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #F9F9F9;
+            border: 1px solid #E0E0E0;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+
+        .hunt-item.completed {
+            background: #E8F5E9;
+            border-color: #C8E6C9;
+            text-decoration: line-through;
+            color: #555;
+        }
+
+        .hunt-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .hunt-title {
+            font-weight: bold;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .hunt-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .hunt-phrase {
+            display: inline-block;
+            background: #FFF8E1;
+            border: 1px solid #FFE082;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 5px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 
-  <h2>Scavenger Hunt Checklist</h2>
-  <div class="progress-bar" id="progress">Found 0 of 0 items</div>
+    <header>
+        <h1>🌴 Puerto Vallarta Slang & Local Guide</h1>
+        <p>Interactive study tool for local Vallarta phrases, logistics, menu decoding, attractions, and scavenger hunt.</p>
+    </header>
 
-  <div id="hunt-list"></div>
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('flashcards', event)">Flashcards</button>
+        <button class="tab-btn" onclick="switchTab('logistics', event)">🚖 Hotel & Currency</button>
+        <button class="tab-btn" onclick="switchTab('attractions', event)">📍 Attractions</button>
+        <button class="tab-btn" onclick="switchTab('scavenger', event)">📸 Scavenger Hunt (40)</button>
+        <button class="tab-btn" onclick="switchTab('quiz', event)">Slang Quiz</button>
+        <button class="tab-btn" onclick="switchTab('menuquiz', event)">Menu Decoder</button>
+        <button class="tab-btn" onclick="switchTab('weakareas', event)">🎯 Weak Areas (<span id="weak-count">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('favorites', event)">⭐ Favorites (<span id="fav-count">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('cheatsheet', event)">Quick Reference</button>
+    </div>
 
-  <button class="reset-btn" id="reset-btn">Reset All Progress</button>
+    <!-- FLASHCARD VIEW -->
+    <div id="flashcards" class="view active">
+        <div class="card-container">
+            <div class="flashcard" id="card" onclick="flipCard()">
+                <div class="card-front">
+                    <span class="category-tag" id="card-cat">Category</span>
+                    <button class="star-btn" id="card-star" onclick="toggleStarCurrent(event)">★</button>
+                    <div class="term" id="card-term">Term</div>
+                    <div class="phonetic" id="card-phone">Pronunciation</div>
+                    <button class="audio-btn" onclick="speakTerm(event)">🔊 Listen</button>
+                    <div class="hint-text">(Click card to reveal meaning)</div>
+                </div>
+                <div class="card-back">
+                    <div class="meaning" id="card-meaning">Meaning</div>
+                    <div class="context" id="card-context">Context & Local Usage</div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="ctrl-btn" id="prev-btn" onclick="prevCard()">Previous</button>
+            <span id="card-counter">1 / 10</span>
+            <button class="ctrl-btn" id="next-btn" onclick="nextCard()">Next</button>
+        </div>
+    </div>
 
-  <script>
-    // 1. Array of scavenger hunt target items (each needs a unique 'id')
-    const huntItems = [
-      { id: 'item_1', name: 'Palapa by the beach' },
-      { id: 'item_2', name: 'Vintage souvenir shop sign' },
-      { id: 'item_3', name: 'Local street art / mural' },
-      { id: 'item_4', name: 'Fresh coconut stand' }
-    ];
+    <!-- LOGISTICS, HOTEL & CURRENCY VIEW -->
+    <div id="logistics" class="view">
+        <div class="info-card accent-border">
+            <div class="info-title">🏨 Accommodation Card</div>
+            <p>Show this screen to any taxi or rideshare driver when returning to the resort:</p>
+            <div class="hotel-box">
+                <div style="font-size: 1.3rem; font-weight: bold; color: var(--primary-dark);">Plaza Pelicanos Grand Beach Resort</div>
+                <div style="font-size: 1.05rem; margin-top: 4px;"><strong>Dirección:</strong> José Clemente Orozco 131, Zona Hotelera Las Glorias</div>
+                <div style="font-size: 0.95rem; color: #555; margin-top: 4px;"><strong>Referencia:</strong> Por la Av. Francisco Medina Ascencio, Zona Hotelera Las Glorias</div>
+            </div>
+            <div style="margin-top: 10px; margin-bottom: 5px;">
+                <a href="https://www.google.com/maps/search/?api=1&query=Plaza+Pelicanos+Grand+Beach+Resort" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
+                    📍 Open Hotel Pin in Google Maps ↗
+                </a>
+            </div>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "Al Plaza Pelicanos Grand en Las Glorias, por favor."
+            </div>
+        </div>
 
-    // Key used to store array of found IDs in localStorage
-    const STORAGE_KEY = 'scavenger_found_items';
+        <div class="info-card">
+            <div class="info-title">💵 Tipping & Peso Calculator</div>
+            <p style="margin-bottom: 10px;">Quick reference for local tipping standards in Puerto Vallarta:</p>
+            <ul style="margin-left: 20px; font-size: 0.95rem; margin-bottom: 15px;">
+                <li><strong>Restaurants:</strong> 10%–15% (Check bill for <em>"Propina Incluida"</em> first).</li>
+                <li><strong>Taxis:</strong> Tipping is not expected, but round up $10–$20 pesos for good service.</li>
+                <li><strong>Panga Drivers / Tour Guides:</strong> $50–$100 pesos per couple.</li>
+                <li><strong>Baggage / Bellhops:</strong> $20–$50 pesos per bag.</li>
+            </ul>
 
-    // 2. Load saved IDs from localStorage (or default to empty array)
-    function getSavedFoundIds() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    }
+            <div style="background: #F0F4F8; padding: 12px; border-radius: 8px;">
+                <strong>Quick Peso &rightarrow; USD Converter</strong> (Estimated at 20 MXN = $1 USD):
+                <div class="calc-box">
+                    <input type="number" id="peso-input" class="calc-input" placeholder="Pesos ($)" oninput="convertPesos()">
+                    <span>MXN = </span>
+                    <strong id="usd-output" style="font-size: 1.2rem; color: var(--accent);">$0.00 USD</strong>
+                </div>
+            </div>
+        </div>
 
-    // 3. Save updated IDs array to localStorage
-    function saveFoundIds(foundArray) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(foundArray));
-    }
+        <div class="info-card">
+            <div class="info-title">🚨 Emergency & Key Numbers</div>
+            <div class="directions-grid">
+                <div class="dir-item">
+                    <div class="dir-es">911</div>
+                    <div class="hint-text">National Emergency Services (Police, Ambulance, Fire)</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">U.S. Consular Agency PV</div>
+                    <div class="hint-text">+52 (333) 268-2100 (Paradise Plaza, Nuevo Vallarta)</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // 4. Toggle item status when "Found It!" button is clicked
-    function toggleFoundStatus(itemId) {
-      let foundIds = getSavedFoundIds();
+    <!-- ATTRACTIONS & DIRECTIONS VIEW -->
+    <div id="attractions" class="view">
+        <div class="info-card accent-border">
+            <div class="info-title">🧭 "¿Cómo llegamos a...?" Direction Helper</div>
+            <p>How to ask for and understand directions from locals when exploring PV:</p>
+            <div class="directions-grid">
+                <div class="dir-item">
+                    <div class="dir-es">¿Cómo llegamos a...?</div>
+                    <div class="hint-text">"How do we get to...?"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">Todo derecho / Todo recto</div>
+                    <div class="hint-text">"Straight ahead"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">A la derecha / A la izquierda</div>
+                    <div class="hint-text">"To the right / To the left"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">A unas cuadras</div>
+                    <div class="hint-text">"A few blocks away"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">A la vuelta</div>
+                    <div class="hint-text">"Just around the corner"</div>
+                </div>
+                <div class="dir-item">
+                    <div class="dir-es">Cruzando la calle</div>
+                    <div class="hint-text">"Across the street"</div>
+                </div>
+            </div>
+        </div>
 
-      if (foundIds.includes(itemId)) {
-        // Remove item if already found (uncheck)
-        foundIds = foundIds.filter(id => id !== itemId);
-      } else {
-        // Add item if newly found
-        foundIds.push(itemId);
-      }
+        <!-- MALECÓN -->
+        <div class="info-card">
+            <div class="info-title">El Malecón & Downtown Boardwalk</div>
+            <span class="attraction-tag">In-Town Iconic Spot</span>
+            <p>The famous oceanfront boardwalk featuring bronze sculptures, street performers, and sunset views.</p>
+            <div class="transit-grid">
+                <div class="transit-item">🚶 Walking: <span>~40–45 min</span></div>
+                <div class="transit-item">🚕 Taxi / Uber: <span>8–12 min</span></div>
+                <div class="transit-item">🚌 Public Bus: <span>12–15 min</span></div>
+                <div class="transit-item">🛥️ Water Taxi: <span>N/A</span></div>
+            </div>
+            <div style="margin-top: 10px; margin-bottom: 5px;">
+                <a href="https://www.google.com/maps/search/?api=1&query=Malecon+Puerto+Vallarta" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.95rem;">
+                    📍 Open Boardwalk Pin in Google Maps ↗
+                </a>
+            </div>
+            <div class="phrase-box">
+                🗣️ <strong>Phrase:</strong> "¿Cómo llegamos al Malecón, por favor?" or "Al Malecón, por favor."
+            </div>
+        </div>
+    </div>
 
-      saveFoundIds(foundIds);
-      renderList();
-    }
+    <!-- SCAVENGER HUNT VIEW -->
+    <div id="scavenger" class="view">
+        <div class="info-card accent-border">
+            <div class="info-title">📸 Vallarta Photo & Phrase Scavenger Hunt</div>
+            <p>Challenge yourself to spot these 40 iconic Vallarta items and practice your Spanish with locals!</p>
+            
+            <div style="margin-top: 15px; display: flex; justify-content: space-between; font-weight: bold;">
+                <span>Progress</span>
+                <span id="hunt-score">0 / 40 Completed</span>
+            </div>
+            <div class="hunt-progress-bar">
+                <div class="hunt-progress-fill" id="hunt-progress"></div>
+            </div>
+        </div>
 
-    // 5. Render list & update progress display
-    function renderList() {
-      const listContainer = document.getElementById('hunt-list');
-      const progressContainer = document.getElementById('progress');
-      const foundIds = getSavedFoundIds();
+        <!-- GENERATOR CARD WITH FOUND IT BUTTON -->
+        <div class="generator-card">
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary-dark);">🎲 Random Target Challenge</div>
+            <p style="font-size: 0.9rem; color: #555; margin-top: 4px;">Click to generate a target item to find right now on your walk!</p>
+            
+            <div class="gen-target-box" id="target-box">
+                <span style="color: #888; font-style: italic;">Click "Generate Random Challenge" below to start!</span>
+            </div>
 
-      listContainer.innerHTML = '';
+            <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="ctrl-btn" onclick="generateRandomHuntItem()">🎲 Generate Random Challenge</button>
+                <button class="ctrl-btn secondary" id="found-it-btn" onclick="markTargetFound()" style="display: none;">✅ Found It!</button>
+            </div>
+        </div>
 
-      huntItems.forEach(item => {
-        const isFound = foundIds.includes(item.id);
+        <div id="hunt-list">
+            <!-- Dynamically populated scavenger hunt items -->
+        </div>
+    </div>
 
-        const card = document.createElement('div');
-        card.className = `item-card ${isFound ? 'found' : ''}`;
+    <!-- QUIZ VIEW -->
+    <div id="quiz" class="view">
+        <div class="quiz-card">
+            <div class="quiz-question" id="quiz-q">Question text goes here...</div>
+            <div class="options-grid" id="quiz-opts"></div>
+            <div class="quiz-feedback" id="quiz-feed"></div>
+            <div class="controls">
+                <button class="ctrl-btn" onclick="nextQuizQuestion()">Next Question</button>
+            </div>
+        </div>
+    </div>
 
-        card.innerHTML = `
-          <span class="item-title">${item.name}</span>
-          <button class="found-btn ${isFound ? 'is-found' : ''}" onclick="toggleFoundStatus('${item.id}')">
-            ${isFound ? '✓ Found' : 'Found It!'}
-          </button>
-        `;
+    <!-- MENU QUIZ VIEW -->
+    <div id="menuquiz" class="view">
+        <div class="menu-banner">
+            <span class="dish-label" id="menu-cat-label">Dish Type</span>
+            <span class="dish-title" id="menu-title">Dish Name</span>
+        </div>
+        <div class="quiz-card">
+            <div class="quiz-question" id="menu-q">What is this dish?</div>
+            <div class="options-grid" id="menu-opts"></div>
+            <div class="quiz-feedback" id="menu-feed"></div>
+            <div class="controls">
+                <button class="ctrl-btn" onclick="nextMenuQuestion()">Next Dish</button>
+            </div>
+        </div>
+    </div>
 
-        listContainer.appendChild(card);
-      });
+    <!-- WEAK AREAS VIEW -->
+    <div id="weakareas" class="view">
+        <div class="info-card">
+            <div class="info-title">🎯 Weak Areas Review</div>
+            <p>Cards you missed during the quiz will appear here so you can review them specifically.</p>
+        </div>
+        <div class="cheat-sheet" id="weak-list"></div>
+    </div>
 
-      // Update progress header
-      progressContainer.textContent = `Found ${foundIds.length} of ${huntItems.length} items`;
-    }
+    <!-- FAVORITES VIEW -->
+    <div id="favorites" class="view">
+        <div class="info-card">
+            <div class="info-title">⭐ Favorite Cards</div>
+            <p>Cards you starred will appear here for quick access.</p>
+        </div>
+        <div class="cheat-sheet" id="fav-list"></div>
+    </div>
 
-    // Optional: Reset button to start over
-    document.getElementById('reset-btn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to reset all found items?')) {
-        localStorage.removeItem(STORAGE_KEY);
-        renderList();
-      }
-    });
+    <!-- QUICK REFERENCE CHEAT SHEET -->
+    <div id="cheatsheet" class="view">
+        <input type="text" class="search-box" id="search" placeholder="🔍 Search terms, meanings, or categories..." oninput="filterCheatSheet()">
+        <div class="cheat-sheet" id="cheat-list"></div>
+    </div>
 
-    // Initial render on load
-    document.addEventListener('DOMContentLoaded', renderList);
-  </script>
+    <script>
+        // Sample Flashcards Data
+        const cardsData = [
+            { term: "¡Pura Vida!", phone: "POO-rah VEE-dah", meaning: "Pure life / Great / Everything's good", context: "Used as a greeting, farewell, or to express general positivity.", cat: "Slang" },
+            { term: "¿Qué onda?", phone: "keh OHN-dah", meaning: "What's up?", context: "Informal greeting used among friends.", cat: "Slang" },
+            { term: "Chilango", phone: "chee-LAHN-goh", meaning: "Person from Mexico City", context: "Used commonly throughout Mexico, including Vallarta.", cat: "Culture" },
+            { term: "Panga", phone: "PAHN-gah", meaning: "Small open motorboat", context: "Used for water taxis and local fishing trips in PV.", cat: "Transport" },
+            { term: "Agua de Coco", phone: "AH-gwah deh KOH-koh", meaning: "Fresh Coconut Water", context: "Sold fresh by beach vendors along the Malecón.", cat: "Food & Drink" }
+        ];
 
+        // Scavenger Hunt Items (Sample subset of 40)
+        const huntItems = [
+            { id: 1, title: "Bronze Seahorse Statue", desc: "The famous 'El Niño Sobre el Caballo de Mar' sculpture on the Malecón.", phrase: "¿Dónde está la estatua del caballito de mar?", diff: "easy" },
+            { id: 2, title: "Fresh Coconut Vendor", desc: "Buy a fresh coconut prepared with lime and tajín.", phrase: "Un agua de coco por favor.", diff: "easy" },
+            { id: 3, title: "Panga Water Taxi", desc: "Spot or ride a local small open boat along Boca de Tomatlán or Los Muertos pier.", phrase: "¿Cuánto cuesta la panga?", diff: "medium" },
+            { id: 4, title: "Crown of Guadalupe Church", desc: "Spot the iconic crown atop the Church of Our Lady of Guadalupe.", phrase: "La Parroquia de Nuestra Señora de Guadalupe", diff: "easy" },
+            { id: 5, title: "Voladores de Papantla", desc: "Watch the ceremonial pole dancers near the beach.", phrase: "Los Papantla fly dancers", diff: "hard" }
+        ];
+
+        let currentCardIndex = 0;
+        let starredIndices = new Set();
+        let weakIndices = new Set();
+        let completedHuntIds = new Set();
+        let currentTargetHuntId = null;
+
+        // Tab Switching
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if (event) event.target.classList.add('active');
+            
+            if (tabId === 'cheatsheet') renderCheatSheet();
+            if (tabId === 'favorites') renderFavorites();
+            if (tabId === 'weakareas') renderWeakAreas();
+        }
+
+        // Flashcards Logic
+        function renderCard() {
+            const card = cardsData[currentCardIndex];
+            document.getElementById('card-cat').innerText = card.cat;
+            document.getElementById('card-term').innerText = card.term;
+            document.getElementById('card-phone').innerText = card.phone;
+            document.getElementById('card-meaning').innerText = card.meaning;
+            document.getElementById('card-context').innerText = card.context;
+            document.getElementById('card-counter').innerText = `${currentCardIndex + 1} / ${cardsData.length}`;
+            
+            const starBtn = document.getElementById('card-star');
+            if (starredIndices.has(currentCardIndex)) {
+                starBtn.classList.add('starred');
+            } else {
+                starBtn.classList.remove('starred');
+            }
+            
+            document.getElementById('card').classList.remove('flipped');
+            document.getElementById('prev-btn').disabled = currentCardIndex === 0;
+            document.getElementById('next-btn').disabled = currentCardIndex === cardsData.length - 1;
+        }
+
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (currentCardIndex < cardsData.length - 1) {
+                currentCardIndex++;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                renderCard();
+            }
+        }
+
+        function toggleStarCurrent(event) {
+            event.stopPropagation();
+            if (starredIndices.has(currentCardIndex)) {
+                starredIndices.delete(currentCardIndex);
+            } else {
+                starredIndices.add(currentCardIndex);
+            }
+            document.getElementById('fav-count').innerText = starredIndices.size;
+            renderCard();
+        }
+
+        function speakTerm(event) {
+            event.stopPropagation();
+            const utterance = new SpeechSynthesisUtterance(cardsData[currentCardIndex].term);
+            utterance.lang = 'es-MX';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Converter
+        function convertPesos() {
+            const pesos = parseFloat(document.getElementById('peso-input').value) || 0;
+            const usd = (pesos / 20).toFixed(2);
+            document.getElementById('usd-output').innerText = `$${usd} USD`;
+        }
+
+        // Scavenger Hunt & Generator Logic
+        function renderScavengerHunt() {
+            const listContainer = document.getElementById('hunt-list');
+            listContainer.innerHTML = '';
+
+            huntItems.forEach(item => {
+                const isChecked = completedHuntIds.has(item.id);
+                const itemEl = document.createElement('div');
+                itemEl.className = `hunt-item ${isChecked ? 'completed' : ''}`;
+                itemEl.innerHTML = `
+                    <input type="checkbox" id="hunt-${item.id}" ${isChecked ? 'checked' : ''} onchange="toggleHuntItem(${item.id})">
+                    <div>
+                        <div class="hunt-title">${item.title}</div>
+                        <div class="hunt-desc">${item.desc}</div>
+                        <div class="hunt-phrase">🗣️ ${item.phrase}</div>
+                    </div>
+                `;
+                listContainer.appendChild(itemEl);
+            });
+
+            updateHuntProgress();
+        }
+
+        function toggleHuntItem(id) {
+            if (completedHuntIds.has(id)) {
+                completedHuntIds.delete(id);
+            } else {
+                completedHuntIds.add(id);
+            }
+            renderScavengerHunt();
+        }
+
+        function updateHuntProgress() {
+            const score = completedHuntIds.size;
+            const total = huntItems.length;
+            const pct = (score / total) * 100;
+            
+            document.getElementById('hunt-score').innerText = `${score} / ${total} Completed`;
+            document.getElementById('hunt-progress').style.width = `${pct}%`;
+        }
+
+        // Random Challenge Generator
+        function generateRandomHuntItem() {
+            const uncompleted = huntItems.filter(item => !completedHuntIds.has(item.id));
+            const targetBox = document.getElementById('target-box');
+            const foundBtn = document.getElementById('found-it-btn');
+
+            if (uncompleted.length === 0) {
+                targetBox.innerHTML = `
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">🎉 All Challenges Completed!</div>
+                    <div style="font-size: 0.9rem; color: #555; margin-top: 4px;">You found everything on the list!</div>
+                `;
+                foundBtn.style.display = 'none';
+                currentTargetHuntId = null;
+                return;
+            }
+
+            const randomItem = uncompleted[Math.floor(Math.random() * uncompleted.length)];
+            currentTargetHuntId = randomItem.id;
+
+            targetBox.innerHTML = `
+                <span class="gen-difficulty diff-${randomItem.diff}">${randomItem.diff}</span>
+                <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary-dark);">${randomItem.title}</div>
+                <div style="font-size: 0.9rem; color: #555; margin-top: 2px;">${randomItem.desc}</div>
+                <div class="hunt-phrase" style="margin-top: 8px;">🗣️ ${randomItem.phrase}</div>
+            `;
+
+            foundBtn.style.display = 'inline-block';
+        }
+
+        // "Found It!" Button Trigger Function
+        function markTargetFound() {
+            if (currentTargetHuntId !== null) {
+                completedHuntIds.add(currentTargetHuntId);
+                renderScavengerHunt();
+                
+                // Automatically generate the next target
+                generateRandomHuntItem();
+            }
+        }
+
+        // Quick Reference Rendering
+        function renderCheatSheet() {
+            const container = document.getElementById('cheat-list');
+            container.innerHTML = cardsData.map(c => `
+                <div class="cheat-item">
+                    <div>
+                        <div class="cheat-term">${c.term}</div>
+                        <div class="hint-text">${c.phone} &bull; <em>${c.cat}</em></div>
+                    </div>
+                    <div style="text-align: right; font-weight: bold;">${c.meaning}</div>
+                </div>
+            `).join('');
+        }
+
+        function filterCheatSheet() {
+            const q = document.getElementById('search').value.toLowerCase();
+            const filtered = cardsData.filter(c => 
+                c.term.toLowerCase().includes(q) || 
+                c.meaning.toLowerCase().includes(q) || 
+                c.cat.toLowerCase().includes(q)
+            );
+            document.getElementById('cheat-list').innerHTML = filtered.map(c => `
+                <div class="cheat-item">
+                    <div>
+                        <div class="cheat-term">${c.term}</div>
+                        <div class="hint-text">${c.phone} &bull; <em>${c.cat}</em></div>
+                    </div>
+                    <div style="text-align: right; font-weight: bold;">${c.meaning}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('fav-list');
+            if (starredIndices.size === 0) {
+                container.innerHTML = '<p style="color: #888;">No favorites added yet. Click the star on any card!</p>';
+                return;
+            }
+            container.innerHTML = Array.from(starredIndices).map(i => {
+                const c = cardsData[i];
+                return `
+                    <div class="cheat-item">
+                        <div>
+                            <div class="cheat-term">${c.term}</div>
+                            <div class="hint-text">${c.phone} &bull; <em>${c.cat}</em></div>
+                        </div>
+                        <div style="text-align: right; font-weight: bold;">${c.meaning}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderWeakAreas() {
+            const container = document.getElementById('weak-list');
+            if (weakIndices.size === 0) {
+                container.innerHTML = '<p style="color: #888;">No weak areas flagged yet! Take a quiz to test your knowledge.</p>';
+                return;
+            }
+            container.innerHTML = Array.from(weakIndices).map(i => {
+                const c = cardsData[i];
+                return `
+                    <div class="cheat-item">
+                        <div>
+                            <div class="cheat-term">${c.term}</div>
+                            <div class="hint-text">${c.phone} &bull; <em>${c.cat}</em></div>
+                        </div>
+                        <div style="text-align: right; font-weight: bold;">${c.meaning}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderCard();
+            renderScavengerHunt();
+        };
+    </script>
 </body>
 </html>
