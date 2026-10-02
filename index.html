@@ -834,13 +834,48 @@
             { term: "Agua de Coco", phone: "AH-gwah deh KOH-koh", meaning: "Fresh Coconut Water", context: "Sold fresh by beach vendors along the Malecón.", cat: "Food & Drink" }
         ];
 
-        // Scavenger Hunt Items (Sample subset of 40)
+        // All 40 Scavenger Hunt Items
         const huntItems = [
             { id: 1, title: "Bronze Seahorse Statue", desc: "The famous 'El Niño Sobre el Caballo de Mar' sculpture on the Malecón.", phrase: "¿Dónde está la estatua del caballito de mar?", diff: "easy" },
             { id: 2, title: "Fresh Coconut Vendor", desc: "Buy a fresh coconut prepared with lime and tajín.", phrase: "Un agua de coco por favor.", diff: "easy" },
             { id: 3, title: "Panga Water Taxi", desc: "Spot or ride a local small open boat along Boca de Tomatlán or Los Muertos pier.", phrase: "¿Cuánto cuesta la panga?", diff: "medium" },
             { id: 4, title: "Crown of Guadalupe Church", desc: "Spot the iconic crown atop the Church of Our Lady of Guadalupe.", phrase: "La Parroquia de Nuestra Señora de Guadalupe", diff: "easy" },
-            { id: 5, title: "Voladores de Papantla", desc: "Watch the ceremonial pole dancers near the beach.", phrase: "Los Papantla fly dancers", diff: "hard" }
+            { id: 5, title: "Voladores de Papantla", desc: "Watch the ceremonial pole dancers performing near the beach.", phrase: "Los Voladores de Papantla", diff: "medium" },
+            { id: 6, title: "Street Tacos de Birria", desc: "Try traditional Jalisco-style braised beef or goat tacos with consomé.", phrase: "Dos tacos de birria con todo, por favor.", diff: "easy" },
+            { id: 7, title: "Pescado Zarandeado", desc: "Enjoy fresh local grilled fish marinated in chili and spices.", phrase: "¿Tienen pescado zarandeado?", diff: "medium" },
+            { id: 8, title: "Sand Sculpture on Beach", desc: "Find an elaborate sand sculpture crafted along the shore.", phrase: "¡Qué bonita escultura de arena!", diff: "easy" },
+            { id: 9, title: "Los Muertos Pier at Night", desc: "Take a photo of the sailboat-shaped pier illuminated after sunset.", phrase: "El muelle de Los Muertos", diff: "easy" },
+            { id: 10, title: "Huichol Yarn or Bead Art", desc: "Spot vibrant native Huichol (Wixárika) handicrafts in a local shop.", phrase: "Arte Huichol", diff: "easy" },
+            { id: 11, title: "Yellow City Bus (Combi)", desc: "Ride or snap a photo of a local Vallarta public bus.", phrase: "¿Este autobús va al centro?", diff: "easy" },
+            { id: 12, title: "Charro Statue", desc: "Locate the statue of the Mexican horseman on the Malecón.", phrase: "El Charrro en el Malecón", diff: "easy" },
+            { id: 13, title: "Agua Fresca Stand", desc: "Order a cold agua de horchata, jamaica, or tamarindo.", phrase: "Una agua fresca de jamaica, por favor.", diff: "easy" },
+            { id: 14, title: "Iguana in Trees / Park", desc: "Spot a giant wild iguana in Cuale River Island or a local park.", phrase: "Mira, ¡una iguana!", diff: "medium" },
+            { id: 15, title: "Cerveza Pacífico with Lime", desc: "Enjoy a ice-cold local Pacifico beer by the ocean.", phrase: "Una Pacífico bien fría, por favor.", diff: "easy" },
+            { id: 16, title: "Cuale River Flea Market", desc: "Cross the footbridges to shop at Isla Cuale market.", phrase: "¿Cuánto es lo menos por esto?", diff: "easy" },
+            { id: 17, title: "Tequila or Mezcal Tasting", desc: "Sample artisanal tequila or raicilla with a local vendor.", phrase: "Una cata de raicilla o tequila", diff: "medium" },
+            { id: 18, title: "Pelican Diving for Fish", desc: "Spot pelicans fishing off the shore in front of the resort.", phrase: "Los pelícanos en el mar", diff: "easy" },
+            { id: 19, title: "Papel Picado Banners", desc: "Find colorful punched-paper banners hanging across cobblestone streets.", phrase: "Papel picado tradicional", diff: "easy" },
+            { id: 20, title: "Churros Cart", desc: "Order hot, fresh churros sprinkled with sugar and cinnamon.", phrase: "Un paquete de churros calientes, por favor.", diff: "easy" },
+            { id: 21, title: "Cobblestone Street Sign", desc: "Snap a photo of a hand-painted tile street name in El Centro.", phrase: "Las calles de piedra", diff: "easy" },
+            { id: 22, title: "El Rincón de la Vieja / Gringo Gulch", desc: "Explore the scenic hillside neighborhood behind downtown.", phrase: "Gringo Gulch y el puente del amor", diff: "medium" },
+            { id: 23, title: "Fresh Mango on a Stick", desc: "Buy a mango carved like a flower with lime, salt, and chili.", phrase: "Un mango con chile y limón, por favor.", diff: "easy" },
+            { id: 24, title: "Mariachi Band Playing", desc: "Listen to a live Mariachi performance along the beach or square.", phrase: "¡Que toque el mariachi!", diff: "easy" },
+            { id: 25, title: "Rooftop Sunset View", desc: "Catch the sunset over Banderas Bay from a rooftop bar.", phrase: "La puesta del sol en la bahía", diff: "easy" },
+            { id: 26, title: "Raicilla Cocktail", desc: "Order a cocktail made with local Jalisco agave spirit, Raicilla.", phrase: "Un cóctel con raicilla, por favor.", diff: "medium" },
+            { id: 27, title: "Mata De Chile / Local Salsa", desc: "Try a fiery habanero or roasted molcajete salsa at a taco stand.", phrase: "¿Esta salsa pica mucho?", diff: "easy" },
+            { id: 28, title: "Cat resting on Cobblestones", desc: "Spot one of Vallarta's famous relaxed neighborhood street cats.", phrase: "El gatito de la calle", diff: "medium" },
+            { id: 29, title: "Tuba Drink Vendor", desc: "Find a street vendor serving traditional palm-sap Tuba with walnuts and apple.", phrase: "Un vaso de tuba fresca, por favor.", diff: "hard" },
+            { id: 30, title: "Friendship Fountain sculpture", desc: "Find 'Rotonda del Mar' or the dolphin fountain on the boardwalk.", phrase: "La fuente de los delfines", diff: "easy" },
+            { id: 31, title: "Hand-blown Glass Souvenir", desc: "Spot traditional Mexican blown glass with blue rims in a local market.", phrase: "Vidrio soplado artesanal", diff: "medium" },
+            { id: 32, title: "Oyster Vendor on the Beach", desc: "See fresh oysters served straight from a tray on the sand.", phrase: "Ostiones frescos en su concha", diff: "medium" },
+            { id: 33, title: "Lucha Libre Mask", desc: "Find colorful Mexican wrestling masks for sale in the market.", phrase: "Una máscara de lucha libre", diff: "easy" },
+            { id: 34, title: "Marigalante Pirate Ship", desc: "Spot the galleon pirate ship sailing across the bay.", phrase: "El barco pirata Marigalante", diff: "easy" },
+            { id: 35, title: "Local Craft Beer", desc: "Try a craft IPA or Stout from a Puerto Vallarta brewery.", phrase: "Una cerveza artesanal local", diff: "medium" },
+            { id: 36, title: "Tacos al Pastor Trompo", desc: "See the giant rotating spit of marinated pork with pineapple on top.", phrase: "Tres tacos al pastor con todo", diff: "easy" },
+            { id: 37, title: "Banderas Bay Water Taxi Pier", desc: "Visit the departure point for boats heading to Yelapa or Las Animas.", phrase: "¿A qué hora sale la última panga?", diff: "medium" },
+            { id: 38, title: "Bougainvillea Flowers", desc: "Snap a photo of bright pink or purple bougainvillea cascading over white walls.", phrase: "Las flores de bugambilia", diff: "easy" },
+            { id: 39, title: "Frida Kahlo Mural", desc: "Locate street art or mural depicting Frida Kahlo in the Romantic Zone.", phrase: "Mural de Frida Kahlo", diff: "medium" },
+            { id: 40, title: "Agave Plant", desc: "Spot a blue agave plant growing in a garden or plaza.", phrase: "La planta de agave azul", diff: "easy" }
         ];
 
         let currentCardIndex = 0;
@@ -938,7 +973,7 @@
                 itemEl.innerHTML = `
                     <input type="checkbox" id="hunt-${item.id}" ${isChecked ? 'checked' : ''} onchange="toggleHuntItem(${item.id})">
                     <div>
-                        <div class="hunt-title">${item.title}</div>
+                        <div class="hunt-title">${item.id}. ${item.title}</div>
                         <div class="hunt-desc">${item.desc}</div>
                         <div class="hunt-phrase">🗣️ ${item.phrase}</div>
                     </div>
@@ -975,7 +1010,7 @@
 
             if (uncompleted.length === 0) {
                 targetBox.innerHTML = `
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">🎉 All Challenges Completed!</div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">🎉 All 40 Challenges Completed!</div>
                     <div style="font-size: 0.9rem; color: #555; margin-top: 4px;">You found everything on the list!</div>
                 `;
                 foundBtn.style.display = 'none';
@@ -988,7 +1023,7 @@
 
             targetBox.innerHTML = `
                 <span class="gen-difficulty diff-${randomItem.diff}">${randomItem.diff}</span>
-                <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary-dark);">${randomItem.title}</div>
+                <div style="font-size: 1.2rem; font-weight: bold; color: var(--primary-dark);">${randomItem.id}. ${randomItem.title}</div>
                 <div style="font-size: 0.9rem; color: #555; margin-top: 2px;">${randomItem.desc}</div>
                 <div class="hunt-phrase" style="margin-top: 8px;">🗣️ ${randomItem.phrase}</div>
             `;
